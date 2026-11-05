@@ -348,7 +348,7 @@ footer p{margin:0}
 <!-- The counts document. The page renders from this copy first, then switches to the live
      document "dashboard/current" (field "counts") when the artifact database is available. -->
 <script type="application/json" id="fallback">{
-  "asOf": "2026-11-05T02:49:28.976Z",
+  "asOf": "2026-11-05T16:17:38.354Z",
   "testStart": "2026-11-23",
   "length": 90,
   "day": 0,
@@ -1288,8 +1288,8 @@ footer p{margin:0}
       <div class="statusrow">
         <span class="pill" id="pill"><i></i><span id="pillText">Day 0 of 90</span></span>
       </div>
-      <p class="statustext" id="statusText"></p>
-      <p class="asof" id="asOf"></p>
+      <p class="statustext" id="statusText" hidden></p><!-- Demetri 2026-11-05: the checklist already says this -->
+      <p class="asof" id="asOf" hidden></p>
       <label class="switch" for="sampleToggle">
         <input type="checkbox" id="sampleToggle">
         <span class="track" aria-hidden="true"></span>

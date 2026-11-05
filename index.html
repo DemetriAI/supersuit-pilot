@@ -1,0 +1,2347 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>Outreach Test Dashboard</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400..700;1,6..72,400..700&display=swap">
+<style>
+/* Layout: the 90-day dial is the hero (sticky left column on desktop); the weekly read, the funnel and the detail sections stack beside it. One column on phones. */
+:root{
+  --bg:#E8ECF0;
+  --surface:#F7F9FB;
+  --surface-2:#DEE4EA;
+  --ink:#0C1824;
+  --muted:#52617A;
+  --faint:#8A97A8;
+  --line:#C5CED8;
+  --track:#D2D9E1;
+  --future:#E3E8ED;
+  --send:#2443D6;
+  --send-soft:rgba(36,67,214,.12);
+  --reply:#0B8D82;
+  --booked:#C27800;
+  --glow:#F29D12;
+  --good:#146B43;
+  --warn:#944C00;
+  --bad:#B8213A;
+  --bad-soft:rgba(184,33,58,.08);
+  --banner-bg:#F29D12;
+  --banner-ink:#1A1100;
+  --font-display:"Archivo","Arial Narrow",system-ui,sans-serif;
+  --font-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --font-mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --font-serif:"Newsreader","Iowan Old Style",Georgia,"Times New Roman",serif;
+  color-scheme:light;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#070D15; --surface:#0F1824; --surface-2:#172232; --ink:#E6ECF4; --muted:#93A1B5; --faint:#6A7A90;
+    --line:#233144; --track:#1B2738; --future:#152131;
+    --send:#8099FF; --send-soft:rgba(128,153,255,.14); --reply:#3CCFBE; --booked:#F3B740; --glow:#FFB52E;
+    --good:#4ED19A; --warn:#F3A54A; --bad:#FF6B7E; --bad-soft:rgba(255,107,126,.10);
+    --banner-bg:#FFB52E; --banner-ink:#1A1100;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#070D15; --surface:#0F1824; --surface-2:#172232; --ink:#E6ECF4; --muted:#93A1B5; --faint:#6A7A90;
+  --line:#233144; --track:#1B2738; --future:#152131;
+  --send:#8099FF; --send-soft:rgba(128,153,255,.14); --reply:#3CCFBE; --booked:#F3B740; --glow:#FFB52E;
+  --good:#4ED19A; --warn:#F3A54A; --bad:#FF6B7E; --bad-soft:rgba(255,107,126,.10);
+  --banner-bg:#FFB52E; --banner-ink:#1A1100;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--font-body);font-size:15px;line-height:1.5;-webkit-font-smoothing:antialiased;overflow-x:hidden}
+button{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--send);outline-offset:2px}
+
+/* Sample banner */
+.banner{position:sticky;top:env(safe-area-inset-top,0px);z-index:20;background:var(--banner-bg);color:var(--banner-ink);
+  background-image:repeating-linear-gradient(135deg,rgba(0,0,0,.09) 0 10px,transparent 10px 20px);
+  font-family:var(--font-mono);font-size:12px;font-weight:600;letter-spacing:.08em;text-transform:uppercase}
+.banner-in{max-width:1240px;margin:0 auto;padding-block:9px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;gap:12px;align-items:center;justify-content:space-between;flex-wrap:wrap}
+.bn-long{display:none}
+@media (min-width:700px){.bn-long{display:inline}}
+.banner button{background:var(--banner-ink);color:var(--banner-bg);border:0;border-radius:999px;padding:5px 12px;font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;cursor:pointer}
+body.is-sample::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:21;background:var(--banner-bg)}
+
+.wrap{max-width:1240px;margin:0 auto;padding-block:22px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+
+/* Header */
+.top{display:grid;gap:14px;margin-bottom:22px}
+.eyebrow{margin:0;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted)}
+h1{margin:4px 0 0;font-family:var(--font-display);font-stretch:125%;font-weight:850;font-size:clamp(30px,8.4vw,52px);line-height:.95;letter-spacing:-.02em;text-wrap:balance}
+h1 .sixty{color:var(--send)}
+.controls{display:grid;gap:8px;min-width:0}
+.statusrow{display:flex;flex-wrap:wrap;gap:10px 16px;align-items:center}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 10px;border-radius:999px;border:1px solid var(--line);background:var(--surface);font-family:var(--font-mono);font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
+.pill i{width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 0 3px color-mix(in srgb,var(--warn) 22%,transparent)}
+.pill.live i{background:var(--good);box-shadow:0 0 0 3px color-mix(in srgb,var(--good) 22%,transparent)}
+.pill.done i{background:var(--send);box-shadow:0 0 0 3px var(--send-soft)}
+.statustext{margin:0;color:var(--ink);font-size:14.5px;max-width:46ch;text-wrap:pretty}
+.asof{margin:0;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.03em;color:var(--muted)}
+.asof b{color:var(--ink);font-weight:600}
+.src{display:inline-block;margin-left:6px;padding:1px 6px;border-radius:4px;border:1px solid var(--line);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase}
+.src.live{color:var(--good);border-color:color-mix(in srgb,var(--good) 45%,transparent)}
+.switch{display:inline-flex;align-items:center;gap:10px;cursor:pointer;user-select:none;font-size:14px;font-weight:500;padding:6px 0;position:relative}
+.switch input{position:absolute;opacity:0;width:1px;height:1px}
+.switch .track{position:relative;width:42px;height:24px;border-radius:999px;background:var(--track);border:1px solid var(--line);flex:none;transition:background .2s}
+.switch .track::after{content:"";position:absolute;top:2px;left:2px;width:18px;height:18px;border-radius:50%;background:var(--surface);box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .2s}
+.switch input:checked + .track{background:var(--banner-bg);border-color:var(--banner-bg)}
+.switch input:checked + .track::after{transform:translateX(18px)}
+.switch input:focus-visible + .track{outline:2px solid var(--send);outline-offset:2px}
+
+/* Main grid */
+.grid{display:grid;gap:28px}
+.clockcol{display:grid;gap:14px;align-content:start;min-width:0}
+.datacol{display:grid;gap:34px;min-width:0;align-content:start}
+@media (min-width:980px){
+  .top{grid-template-columns:1fr auto;align-items:end}
+  .top .controls{justify-self:end;text-align:right;justify-items:end}
+  .grid{grid-template-columns:minmax(380px,480px) minmax(0,1fr);gap:48px}
+  .clockcol{position:sticky;top:calc(env(safe-area-inset-top,0px) + 56px);align-self:start}
+}
+
+/* Dial */
+.dial{position:relative;width:100%;max-width:480px;margin-inline:auto;aspect-ratio:1/1;container-type:inline-size;border-radius:50%}
+.dial:focus-visible{outline-offset:6px}
+.dial svg{display:block;width:100%;height:100%;overflow:visible}
+.face{fill:var(--surface);stroke:var(--line);stroke-width:1}
+.face-inner{fill:var(--bg);stroke:var(--line);stroke-width:1}
+.cell-track{fill:var(--future);stroke:var(--line);stroke-width:.6;stroke-dasharray:2 2;transition:fill .3s}
+.cell.elapsed .cell-track{fill:var(--track);stroke:none}
+.cell-fill{fill:var(--send)}
+.cell-hit{fill:transparent;cursor:pointer}
+.cell:hover .cell-track{fill:var(--surface-2)}
+.cell.elapsed:hover .cell-track{fill:var(--line)}
+.dot{fill:var(--reply)}
+.dot.more{fill:none;stroke:var(--reply);stroke-width:1.4}
+.bk{fill:var(--booked)}
+.daylbl{font-family:var(--font-mono);font-size:10.5px;fill:var(--muted);text-anchor:middle;dominant-baseline:central}
+.wk{fill:var(--surface-2);cursor:pointer;transition:fill .2s}
+.wk:hover{fill:var(--line)}
+.wk.on{fill:var(--send)}
+.wklbl{font-family:var(--font-mono);font-size:9px;font-weight:600;fill:var(--muted);text-anchor:middle;dominant-baseline:central;pointer-events:none}
+.wklbl.on{fill:var(--surface)}
+.sel{fill:var(--send-soft);stroke:var(--ink);stroke-width:1.4;pointer-events:none}
+.todayglow{fill:var(--glow);filter:url(#glow);opacity:.9;pointer-events:none;animation:pulse 2.4s ease-in-out infinite}
+.todayedge{fill:none;stroke:var(--glow);stroke-width:2;pointer-events:none}
+@keyframes pulse{0%,100%{opacity:.35}50%{opacity:.95}}
+.hand{stroke:var(--glow);stroke-width:2.2;stroke-linecap:round}
+.hand-tip{fill:var(--glow)}
+.hand.idle{stroke:var(--muted)}
+.hand-tip.idle{fill:var(--muted)}
+.startlbl{font-family:var(--font-mono);font-size:8.5px;font-weight:600;letter-spacing:.12em;fill:var(--muted);text-anchor:middle}
+
+.center{position:absolute;left:50%;top:50%;width:40cqw;height:40cqw;transform:translate(-50%,-50%);border-radius:50%;
+  background:var(--surface);border:1px solid var(--line);display:flex;flex-direction:column;align-items:center;justify-content:center;
+  cursor:pointer;padding:0;box-shadow:0 1px 0 var(--surface) inset,0 6px 24px -12px rgba(12,24,36,.35)}
+.c-label{font-family:var(--font-mono);font-size:max(9.5px,2.4cqw);letter-spacing:.18em;text-transform:uppercase;color:var(--muted)}
+.c-num{font-family:var(--font-display);font-stretch:118%;font-weight:850;font-size:15cqw;line-height:.9;letter-spacing:-.03em;font-variant-numeric:tabular-nums;margin-top:.4cqw}
+.c-of{font-family:var(--font-mono);font-size:max(10px,2.6cqw);color:var(--muted);margin-top:.6cqw}
+.c-sub{font-size:max(10.5px,2.6cqw);font-weight:600;margin-top:1cqw;max-width:30cqw;line-height:1.2;text-align:center}
+
+.legend{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 16px;margin:0;padding:0;list-style:none;font-size:12.5px;color:var(--muted)}
+.legend li{display:inline-flex;align-items:center;gap:6px}
+.legend svg{width:14px;height:14px;flex:none}
+
+.scopebar{display:flex;align-items:center;gap:8px;justify-content:center}
+.step{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);cursor:pointer;font-size:18px;line-height:1;display:grid;place-items:center;flex:none}
+.step:disabled{opacity:.35;cursor:default}
+.seg{display:flex;background:var(--surface-2);border-radius:999px;padding:3px;gap:2px;min-width:0}
+.seg button{border:0;background:transparent;border-radius:999px;padding:8px 12px;font-size:13.5px;font-weight:600;cursor:pointer;color:var(--muted);white-space:nowrap;font-variant-numeric:tabular-nums}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(12,24,36,.18)}
+.scope-note{margin:0;text-align:center;font-size:13px;color:var(--muted);min-height:1.5em}
+
+.waiting{border:1px solid var(--line);border-radius:14px;background:var(--surface);padding:16px 16px 6px}
+.waiting h3{margin:0 0 6px;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.waiting ul{list-style:none;margin:0;padding:0}
+.waiting li{display:flex;justify-content:space-between;gap:12px;align-items:center;padding:10px 0;border-top:1px solid var(--line);font-size:14.5px}
+.waiting li:first-child{border-top:0}
+.tag{font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;padding:3px 8px;border-radius:6px;white-space:nowrap}
+.tag.wait{color:var(--warn);background:color-mix(in srgb,var(--warn) 12%,transparent)}
+.tag.ready{color:var(--good);background:color-mix(in srgb,var(--good) 12%,transparent)}
+
+/* Sections */
+.sec{min-width:0}
+.sec-h{display:flex;align-items:baseline;justify-content:space-between;gap:10px;flex-wrap:wrap;border-top:2px solid var(--ink);padding-top:10px;margin-bottom:14px}
+.sec-h h2{margin:0;font-family:var(--font-display);font-stretch:112%;font-weight:750;font-size:19px;letter-spacing:-.005em}
+.cmt-btn{font:600 11px/1 var(--font-mono);letter-spacing:.06em;text-transform:uppercase;color:var(--send);background:var(--send-soft);border:0;border-radius:999px;padding:6px 10px;cursor:pointer;min-height:28px}
+.cmt-btn:hover{background:var(--send);color:var(--surface)}
+.cmt-btn:focus-visible{outline:2px solid var(--send);outline-offset:2px}
+.cmt-hint{margin:0 0 -18px;font-size:13.5px;color:var(--muted)}
+.clockcol > .cmt-btn{justify-self:start}
+.sec-meta{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.scope-tag{font-family:var(--font-mono);font-size:11.5px;color:var(--muted);letter-spacing:.04em}
+.sample-tag{display:none;font-family:var(--font-mono);font-size:10px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;color:var(--banner-ink);background:var(--banner-bg);padding:2px 6px;border-radius:4px}
+body.is-sample .sample-tag{display:inline-block}
+
+.mid{font-family:var(--font-display);font-stretch:108%;font-weight:750;font-size:clamp(24px,6.4vw,32px);line-height:1;letter-spacing:-.015em;font-variant-numeric:tabular-nums;display:block}
+.zero{color:var(--muted)}
+.lbl{display:block;font-size:12.5px;font-weight:600;color:var(--muted);margin-bottom:6px}
+.sub{display:block;font-size:12.5px;color:var(--muted);margin-top:6px;font-variant-numeric:tabular-nums}
+.sw{display:inline-block;width:9px;height:9px;border-radius:2px;margin-right:6px;vertical-align:0}
+.empty{font-size:13.5px;color:var(--muted);margin:0 0 14px}
+
+/* Weekly read: newspaper type inside the clock's card */
+.weekly{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px 18px 16px;position:relative;overflow:hidden}
+.weekly > .sec-h{border-top:0;padding-top:0;margin-bottom:10px}
+.weekly-tabs{display:flex;gap:3px;overflow-x:auto;padding-bottom:4px;margin:0 0 14px;scrollbar-width:none}
+.weekly-tabs::-webkit-scrollbar{display:none}
+.weekly-tabs button{flex:none;min-width:32px;padding:0 4px;height:30px;border-radius:8px;border:1px solid var(--line);background:transparent;font-family:var(--font-mono);font-size:12px;font-weight:600;cursor:pointer;color:var(--muted)}
+.weekly-tabs button.has{color:var(--ink)}
+.weekly-tabs button[aria-pressed="true"]{background:var(--ink);color:var(--surface);border-color:var(--ink)}
+.story{font-family:var(--font-serif);border-top:1px solid var(--ink);padding-top:12px}
+.story h3{margin:0 0 10px;font-family:var(--font-serif);font-weight:600;font-size:clamp(27px,6.8vw,38px);line-height:1.05;letter-spacing:-.018em;text-wrap:balance;font-variation-settings:"opsz" 72}
+.story .deck{margin:0 0 14px;font-style:italic;font-size:18px;line-height:1.4;color:var(--muted);max-width:44ch;text-wrap:pretty}
+.story .body{max-width:62ch}
+.story .body p{margin:0 0 12px;font-size:17px;line-height:1.55;text-wrap:pretty}
+.story .body p.first::first-letter{font-family:var(--font-serif);font-weight:700;float:left;font-size:3.7em;line-height:.8;padding:6px 8px 0 0;font-variation-settings:"opsz" 72}
+.fig-in{font-family:var(--font-mono);font-weight:600;font-size:.88em;letter-spacing:-.01em;font-variant-numeric:tabular-nums}
+.nextweek{margin:16px 0 0;padding:11px 0 12px;border-top:1px solid var(--line);border-bottom:1px solid var(--line);display:grid;gap:3px;max-width:62ch}
+.nextweek b{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.nextweek p{margin:0;font-family:var(--font-serif);font-style:italic;font-size:18px;line-height:1.4}
+.sevenhead{display:flex;justify-content:space-between;align-items:baseline;gap:4px 12px;flex-wrap:wrap;margin:24px 0 4px;border-top:2px solid var(--ink);padding-top:8px}
+.sevenhead h4{margin:0;font-family:var(--font-mono);font-size:12px;font-weight:600;letter-spacing:.12em;text-transform:uppercase}
+.sevenhead span{font-family:var(--font-mono);font-size:11px;color:var(--muted);letter-spacing:.03em}
+.tablewrap7{overflow-x:auto}
+table.seven{width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:13px;font-variant-numeric:tabular-nums}
+.seven th,.seven td{padding:8px 0;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap;vertical-align:baseline}
+.seven th + th,.seven td + td{padding-left:12px}
+.seven thead th{font-size:10px;font-weight:500;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);border-bottom:1px solid var(--ink);vertical-align:bottom}
+.seven th:first-child,.seven td:first-child{text-align:left}
+.seven td:first-child{font-family:var(--font-serif);font-size:16px;white-space:normal}
+.seven tbody tr:last-child td{border-bottom:3px double var(--ink)}
+.seven td.tw{font-weight:600}
+.seven .lineLink{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;text-align:left;text-decoration:underline;text-decoration-color:var(--line);text-underline-offset:3px}
+.seven .lineLink:hover,.seven .lineLink:focus-visible{color:var(--send);text-decoration-color:var(--send);text-decoration-thickness:2px;outline:none}
+.lineDlg{border:0;border-radius:10px;padding:0;width:min(640px,calc(100vw - 32px));max-height:min(80vh,760px);background:var(--surface);color:var(--ink);box-shadow:0 18px 50px rgba(0,0,0,.25)}
+.lineDlg::backdrop{background:rgba(12,24,36,.45)}
+.lineDlg header{display:flex;justify-content:space-between;align-items:baseline;gap:12px;padding:16px 18px 10px;border-bottom:1px solid var(--line);position:sticky;top:0;background:var(--surface)}
+.lineDlg h3{margin:0;font-family:var(--font-display);font-size:18px}
+.lineDlg .dlgBody{padding:8px 18px 18px;overflow:auto}
+.lineDlg details{border-bottom:1px solid var(--line);padding:10px 0}
+.lineDlg summary{cursor:pointer;font-size:15px}
+.lineDlg summary span{font-family:var(--font-mono);font-size:11.5px;color:var(--muted);margin-left:8px}
+.lineDlg pre{white-space:pre-wrap;font-family:var(--font-serif);font-size:14.5px;line-height:1.45;background:var(--bg);border-radius:6px;padding:10px 12px;margin:8px 0 0}
+.lineDlg .mhead{font-family:var(--font-mono);font-size:11px;color:var(--muted);margin-top:10px}
+.lineDlg .empty{color:var(--muted);padding:14px 0}
+.lineDlg .x{font:600 11px/1 var(--font-mono);text-transform:uppercase;letter-spacing:.06em;border:0;background:var(--send-soft);color:var(--send);border-radius:999px;padding:7px 11px;cursor:pointer}
+.seven .lnote{display:block;font-family:var(--font-mono);font-size:10.5px;color:var(--muted);letter-spacing:.02em}
+.seven .spk{width:70px;vertical-align:middle}
+.seven .up{color:var(--good)}
+.seven .down{color:var(--bad)}
+.seven .flat{color:var(--muted)}
+svg.sk{display:block;width:64px;height:18px;overflow:visible;margin-left:auto;color:var(--send)}
+@media (max-width:439px){.seven .spk{display:none}}
+
+/* Funnel: approved to paid, rates sit on the line between two stages */
+.fhint{margin:0 0 6px;font-size:12.5px;color:var(--muted)}
+.fun{list-style:none;margin:0;padding:0}
+.fun li{display:grid;grid-template-columns:minmax(0,5.8em) 3.4em minmax(0,1fr) 8.4em;gap:10px;align-items:center;padding:9px 0;border-top:1px solid var(--line);position:relative}
+.fun li:first-child{border-top:0}
+.f-name{font-size:13px;font-weight:600;line-height:1.2}
+.f-num{font-family:var(--font-display);font-stretch:108%;font-weight:800;font-size:21px;line-height:1;text-align:right;font-variant-numeric:tabular-nums}
+.f-track{height:12px;background:var(--track);border-radius:999px;overflow:hidden;min-width:0}
+.f-bar{display:block;height:100%;border-radius:999px;transition:width .6s ease}
+.f-bar.s-pool{background:repeating-linear-gradient(135deg,var(--send) 0 3px,color-mix(in srgb,var(--send) 45%,var(--surface)) 3px 6px)}
+.f-bar.s-send{background:var(--send)}
+.f-bar.s-reply{background:var(--reply)}
+.f-bar.s-book{background:var(--booked)}
+.f-bar.s-paid{background:var(--good)}
+.f-rate{align-self:start;margin-top:-25px;justify-self:end;text-align:right;background:var(--bg);padding:2px 0 2px 8px;font-family:var(--font-mono);font-size:12px;line-height:1.25;white-space:nowrap}
+.f-rate b{display:block;font-weight:600;color:var(--ink)}
+.f-rate small{display:block;font-size:10.5px;color:var(--muted)}
+.f-rate.first{visibility:hidden}
+.fnote{margin:10px 0 0;font-size:12.5px;color:var(--muted)}
+.fnote b{color:var(--ink);font-variant-numeric:tabular-nums}
+
+/* Replies */
+.stack{display:flex;height:16px;border-radius:999px;overflow:hidden;background:var(--track);margin-bottom:12px}
+.stack span{height:100%;transition:flex-grow .5s ease;flex-basis:0}
+.c-int{background:var(--reply)}
+.c-stop{background:var(--bad)}
+.c-ooo{background:var(--faint)}
+.c-oth{background:color-mix(in srgb,var(--send) 40%,var(--surface))}
+.rlist{list-style:none;margin:0 0 16px;padding:0;display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px 14px}
+@media (min-width:640px){.rlist{grid-template-columns:repeat(4,minmax(0,1fr))}}
+.rlist li{min-width:0}
+.rlist .mid{margin-top:2px}
+.hyg{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.hyg > div{border:1px solid var(--line);border-radius:12px;padding:12px 14px;min-width:0}
+.mid.na{font-size:18px;color:var(--muted);font-stretch:100%;font-weight:600;letter-spacing:0}
+
+/* Inventory */
+/* Questions and decisions ledger */
+.lg-sum{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));gap:10px;margin:0 0 14px}
+.lg-sum button{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:10px 12px;cursor:pointer;color:var(--ink);font:inherit;min-width:0}
+.lg-sum button[aria-pressed="true"]{border-color:var(--ink);box-shadow:inset 0 0 0 1px var(--ink)}
+.lg-sum .lbl{margin-bottom:4px}
+.lg-sum b{font-family:var(--font-display);font-stretch:108%;font-weight:800;font-size:24px;font-variant-numeric:tabular-nums}
+.lg-sum .sub{margin-top:2px}
+.lg-sum .late{color:var(--bad);font-weight:600}
+.lg{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.lg li{min-width:0;padding:10px 12px;border-radius:10px;border:1px solid var(--line);background:var(--surface)}
+.lg li.is-late{border-color:var(--bad);background:var(--bad-soft);box-shadow:inset 4px 0 0 var(--bad)}
+.lg li.is-done{opacity:.72}
+.lg-top{display:flex;gap:8px;align-items:baseline;justify-content:space-between;flex-wrap:wrap}
+.lg-what{font-weight:600;font-size:14.5px;line-height:1.35;min-width:0;flex:1 1 220px;overflow-wrap:anywhere}
+.lg-ans{margin:6px 0 0;font-size:13.5px;line-height:1.45;overflow-wrap:anywhere}
+.lg-ans span{color:var(--muted)}
+.lg-src{margin:6px 0 0;font-family:var(--font-mono);font-size:11px;color:var(--faint);letter-spacing:.02em;overflow-wrap:anywhere}
+.tag.late{color:var(--bad);background:var(--bad-soft)}
+.tag.draft{color:var(--send);background:var(--send-soft)}
+.inv{list-style:none;margin:0;padding:0;display:grid;gap:16px}
+.inv li{min-width:0;padding:12px 14px;border-radius:12px;border:1px solid var(--line);background:var(--surface)}
+.inv li.alert{border-color:var(--bad);background:var(--bad-soft);box-shadow:inset 4px 0 0 var(--bad)}
+.inv-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:8px}
+.inv-name{font-weight:600}
+.inv-nums{font-size:13px;color:var(--muted);font-variant-numeric:tabular-nums}
+.inv-nums b{font-family:var(--font-display);font-stretch:108%;font-size:22px;color:var(--ink);font-weight:800;margin-right:4px}
+.invbar{display:flex;height:10px;border-radius:999px;overflow:hidden;background:var(--track)}
+.invbar span{height:100%;transition:width .5s ease}
+.ib-left{background:var(--send)}
+.ib-used{background:color-mix(in srgb,var(--send) 30%,var(--surface))}
+.ib-held{background:repeating-linear-gradient(135deg,var(--faint) 0 3px,transparent 3px 6px)}
+.inv-alert{margin:8px 0 0;font-size:13.5px;font-weight:600;color:color-mix(in srgb,var(--bad) 85%,var(--ink))}
+.inv-alert.low{color:var(--warn)}
+.inv li.alert .inv-nums{color:var(--ink)}
+.inv-total{display:flex;justify-content:space-between;gap:6px 14px;flex-wrap:wrap;margin-top:12px;font-size:13.5px;color:var(--muted)}
+.inv-total b{color:var(--ink);font-variant-numeric:tabular-nums}
+.invkey{display:flex;gap:4px 14px;flex-wrap:wrap;font-size:12.5px;color:var(--muted);margin-top:10px}
+
+/* Tests */
+.tablewrap{overflow-x:auto;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+table.tt{border-collapse:collapse;width:100%;min-width:320px;font-variant-numeric:tabular-nums}
+.tt th,.tt td{padding:10px 8px;text-align:right;border-bottom:1px solid var(--line);font-size:14px;vertical-align:top}
+.tt th{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.tt th:first-child,.tt td:first-child{text-align:left;padding-left:12px}
+.tt th:last-child,.tt td:last-child{padding-right:12px}
+.tt tr:last-child td{border-bottom:0}
+.tt td .ang{font-weight:600;display:block}
+.tt td .subj{display:block;font-size:12.5px;color:var(--muted);font-style:italic}
+.tt td.best{color:var(--good);font-weight:700}
+
+footer{margin-top:40px;padding-top:14px;border-top:1px solid var(--line);display:grid;gap:8px;font-size:12.5px;color:var(--muted)}
+footer strong{color:var(--ink);font-weight:600}
+footer ul{margin:0;padding-left:18px;font-size:12px}
+footer p{margin:0}
+
+@media (prefers-reduced-motion: reduce){
+  *,*::before,*::after{transition:none!important;animation:none!important}
+  .todayglow{opacity:.7}
+}
+</style>
+</head>
+<body>
+
+<!-- The counts document. The page renders from this copy first, then switches to the live
+     document "dashboard/current" (field "counts") when the artifact database is available. -->
+<script type="application/json" id="fallback">{
+  "asOf": "2026-11-05T02:48:02.769Z",
+  "testStart": "2026-11-23",
+  "length": 90,
+  "day": 0,
+  "status": "Not sending yet. Day 1 is Monday, November 23. Waiting on: three Gmail sending accounts, 24 hours of warm-up on each account, founder approval of copy and list.",
+  "checklist": [
+    {
+      "label": "Signed agreement",
+      "state": "done"
+    },
+    {
+      "label": "Three Gmail sending accounts: Texas made; Florida made; Illinois not made yet",
+      "state": "waiting"
+    },
+    {
+      "label": "Mailing address",
+      "state": "done"
+    },
+    {
+      "label": "24 hours of warm-up on each account: Texas ready Thu 7:17 PM; Florida ready Thu 7:57 PM",
+      "state": "waiting"
+    },
+    {
+      "label": "Founder approval of copy and list",
+      "state": "waiting"
+    },
+    {
+      "label": "Contacts approved in the three states: 19 ready, 133 on hold",
+      "state": "done"
+    }
+  ],
+  "days": [],
+  "inventory": [
+    {
+      "key": "firstTX",
+      "name": "Texas",
+      "approved": 14,
+      "onHold": 87
+    },
+    {
+      "key": "firstFL",
+      "name": "Florida",
+      "approved": 1,
+      "onHold": 6
+    },
+    {
+      "key": "firstIL",
+      "name": "Illinois",
+      "approved": 4,
+      "onHold": 40
+    }
+  ],
+  "outside": 1,
+  "pilot": {
+    "d": 0,
+    "first": 0,
+    "follow": 0,
+    "bounced": 0,
+    "opened": 0,
+    "clicked": 0,
+    "interested": 0,
+    "stop": 0,
+    "ooo": 0,
+    "other": 0,
+    "booked": 0,
+    "held": 0,
+    "paid": 0,
+    "firstTX": 0,
+    "firstFL": 0,
+    "firstIL": 0,
+    "ang": {},
+    "quota": 0,
+    "dates": []
+  },
+  "quota": [
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    0,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    0,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    0,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    0,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    0,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    0,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    0,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    0,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    0,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    0,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    0,
+    500,
+    500,
+    500,
+    500,
+    500,
+    500,
+    0,
+    500,
+    500,
+    500,
+    500,
+    500
+  ],
+  "regionShare": {
+    "firstTX": 0.4,
+    "firstFL": 0.4,
+    "firstIL": 0.2
+  },
+  "angles": null,
+  "next": {},
+  "gaps": [
+    "Opens are not tracked in the lead tracker yet",
+    "Clicks are not tracked in the lead tracker yet"
+  ],
+  "messages": [],
+  "ledger": {
+    "checked": "2026-11-04 15:45 CT",
+    "items": [
+      {
+        "id": "q-address",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "due": "2026-11-03",
+        "status": "done",
+        "source": "email 2026-10-28, 2026-10-30; plan s6",
+        "late": false,
+        "what": "Personal detail for the agreement"
+      },
+      {
+        "id": "q-domain-count",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "How many domains should we buy, and which ones?",
+        "due": "2026-11-02",
+        "status": "done",
+        "answer": "Replaced Nov 4: no domains are bought. The agreement uses the supersuittexas, supersuitflorida and supersuitillinois Gmail accounts.",
+        "source": "email 2026-10-30; answered 2026-11-02 15:56 CT",
+        "late": false
+      },
+      {
+        "id": "q-mailboxes",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Five domains with three mailboxes each is more than your one. What do you think?",
+        "due": "2026-11-03",
+        "status": "done",
+        "answer": "Three free Gmail accounts, one per state: the supersuittexas, supersuitflorida and supersuitillinois Gmail accounts (Exhibit A, Nov 4).",
+        "source": "email 2026-10-30; plan call 2",
+        "late": false
+      },
+      {
+        "id": "q-sign-weekend",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Can we sign over the weekend?",
+        "due": "2026-11-01",
+        "status": "done",
+        "answer": "Signed Nov 4 instead.",
+        "source": "email 2026-10-30",
+        "late": false
+      },
+      {
+        "id": "q-meet-times",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Send a couple of times to meet early next week while Gary is in town",
+        "due": "2026-11-02",
+        "status": "done",
+        "answer": "Nov 1 call held, catchup at Gary's Nov 3, and Wilson's call Wed Nov 4, 1:30 PM CT.",
+        "source": "email 2026-10-30; calendar",
+        "late": false
+      },
+      {
+        "id": "q-text-gary",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Text Gary to set up Austin",
+        "due": "2026-11-01",
+        "status": "done",
+        "answer": "Gary sent the invite: Tue Nov 3, 7 PM CT.",
+        "source": "plan s6; calendar 2026-11-02",
+        "late": false
+      },
+      {
+        "id": "q-messaging",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Messaging draft: four options, your ground rules, screenshots of what's worked",
+        "due": "2026-11-02",
+        "status": "drafted",
+        "answer": "Three drafts, each five sentences at most, under 90 words, with its own subject. In the approval pack, not sent yet.",
+        "source": "plan s6; call 2026-11-04",
+        "late": true
+      },
+      {
+        "id": "q-links-page",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Your ideas on links and the page",
+        "due": "2026-11-02",
+        "status": "drafted",
+        "answer": "No links, skip the January link test, simple page on each domain, drop \"by invitation only\".",
+        "source": "plan s3, s6",
+        "late": true
+      },
+      {
+        "id": "q-ramp",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "What would you change in the ramp and the scorekeeping?",
+        "due": "2026-11-03",
+        "status": "done",
+        "answer": "About 140 a day per account. Mon to Fri 8 AM to 7 PM, Sat 8 AM to 2 PM CT, one every 2.5 minutes per inbox, no Sundays. Stop at the first provider warning.",
+        "source": "plan s3, s4, s6; call 2026-11-04",
+        "late": false
+      },
+      {
+        "id": "q-followups",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "How many follow-ups each person gets, and how they fit 240 a mailbox",
+        "due": "2026-11-03",
+        "status": "done",
+        "answer": "One one-line follow-up each, from the same state account.",
+        "source": "plan s3, s6; call 2026-11-04",
+        "late": false
+      },
+      {
+        "id": "q-numbers",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "How your 9 to 12% replies and 3 to 5 meetings a week are counted",
+        "due": "2026-11-03",
+        "status": "open",
+        "note": "Still a blank in the reply. Demetri brings the export.",
+        "source": "plan s4",
+        "late": true
+      },
+      {
+        "id": "q-salesnav",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Walk us through how names come out of Sales Navigator",
+        "due": "2026-11-03",
+        "status": "drafted",
+        "answer": "Sales Navigator stays out. Apollo, company websites and government records only.",
+        "source": "plan s2",
+        "late": true
+      },
+      {
+        "id": "q-apollo",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Would the first 5,000 from Wilson's Apollo help?",
+        "due": "2026-11-03",
+        "status": "done",
+        "answer": "Deferred on the Nov 4 call. The pilot starts with Demetri's 20 leads.",
+        "source": "plan s2; call 2026-11-04",
+        "late": false
+      },
+      {
+        "id": "q-logo",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Confirm your Texas logo as the inbox picture",
+        "due": "2026-11-03",
+        "status": "open",
+        "note": "Not answered in the reply draft.",
+        "source": "plan s3",
+        "late": true
+      },
+      {
+        "id": "q-size",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Push on the 5 to 20 people and $1M revenue lines",
+        "due": "2026-11-03",
+        "status": "open",
+        "note": "Not answered in the reply draft.",
+        "source": "plan s2",
+        "late": true
+      },
+      {
+        "id": "q-auth",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Create the three Gmail accounts and start warm-up",
+        "due": "2026-11-05",
+        "status": "open",
+        "note": "Starts once the agreement is signed. Each account gets at least 24 hours of warm-up before its first cold email.",
+        "blocked_by": "q-sign",
+        "source": "plan s6",
+        "late": false
+      },
+      {
+        "id": "q-sign",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Sign the agreement",
+        "due": "2026-11-04",
+        "status": "done",
+        "answer": "Signed Nov 4 by Google Workspace e-signature.",
+        "source": "plan s6; call 2026-11-04",
+        "late": false
+      },
+      {
+        "id": "q-count",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Clean count by state and the first 50 names to check",
+        "due": "2026-11-13",
+        "status": "open",
+        "blocked_by": "w-apollo",
+        "source": "plan s2, s6",
+        "late": false
+      },
+      {
+        "id": "q-segment",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "First list segment and templates for approval",
+        "due": "2026-11-13",
+        "status": "open",
+        "source": "plan s6",
+        "late": false
+      },
+      {
+        "id": "q-dashboard",
+        "group": "asked",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Dashboard live at a link, connected to all mailboxes",
+        "due": "2026-11-20",
+        "status": "open",
+        "note": "Live at its link with comments. Connects to the three Gmail accounts once they exist.",
+        "source": "plan s6; call 2026-11-01",
+        "late": false
+      },
+      {
+        "id": "w-edits",
+        "group": "owed",
+        "from": "Demetri",
+        "owner": "Wilson",
+        "what": "Put the mailbox, pause and refund answers into the agreement",
+        "due": "2026-10-30",
+        "status": "done",
+        "answer": "Doc updated Oct 30. The 400 a day became a ramp, with a stop rule in 6.10.",
+        "source": "email 2026-10-30",
+        "late": false
+      },
+      {
+        "id": "w-box",
+        "group": "owed",
+        "from": "Demetri",
+        "owner": "Wilson",
+        "what": "UPS Store box number for the footer",
+        "due": "2026-11-02",
+        "status": "done",
+        "note": "Received Nov 4, 12:55 PM CT and put in the footer.",
+        "source": "email 2026-10-30; call 2026-11-01; plan s6; card photo 2026-11-04",
+        "late": false
+      },
+      {
+        "id": "w-domains",
+        "group": "owed",
+        "from": "Demetri",
+        "owner": "Wilson",
+        "what": "Buy the three domains and open the Google account",
+        "due": "2026-11-02",
+        "status": "done",
+        "answer": "Not needed: the agreement uses free Gmail accounts instead of domains.",
+        "source": "email 2026-10-30; plan s6",
+        "late": false
+      },
+      {
+        "id": "w-calls",
+        "group": "owed",
+        "from": "Demetri",
+        "owner": "Wilson and Gary",
+        "what": "Make the eight calls in section 5 of the plan",
+        "due": "2026-11-03",
+        "status": "open",
+        "source": "plan s5",
+        "late": true
+      },
+      {
+        "id": "w-msg-edits",
+        "group": "owed",
+        "from": "Demetri",
+        "owner": "Wilson",
+        "what": "Combined edits on the messages",
+        "due": "2026-11-03",
+        "status": "open",
+        "note": "Waits on the messaging draft going out.",
+        "blocked_by": "q-messaging",
+        "source": "plan s6",
+        "late": true
+      },
+      {
+        "id": "w-clean-copy",
+        "group": "owed",
+        "from": "Demetri",
+        "owner": "Wilson",
+        "what": "Clean agreement copy to sign",
+        "due": "2026-11-04",
+        "status": "done",
+        "answer": "Live Google Doc, last changed Nov 4, 2:48 PM CT.",
+        "source": "plan s6, s7",
+        "late": false
+      },
+      {
+        "id": "w-getsupersuit",
+        "group": "owed",
+        "from": "Wilson",
+        "owner": "Gary",
+        "what": "Decide whether getsupersuit.com can send",
+        "due": "2026-11-03",
+        "status": "open",
+        "source": "plan s3, s5",
+        "late": true
+      },
+      {
+        "id": "w-gary-dnc",
+        "group": "owed",
+        "from": "Wilson",
+        "owner": "Gary",
+        "what": "Add his own people to the do-not-contact list",
+        "due": "2026-11-03",
+        "status": "open",
+        "source": "plan s6",
+        "late": true
+      },
+      {
+        "id": "w-gary-auth",
+        "group": "owed",
+        "from": "Wilson",
+        "owner": "Gary",
+        "what": "Check authentication on all three domains",
+        "due": "2026-11-04",
+        "status": "done",
+        "answer": "Not needed: no domains to authenticate with Gmail accounts.",
+        "source": "plan s6",
+        "late": false
+      },
+      {
+        "id": "w-pack",
+        "group": "owed",
+        "from": "Demetri",
+        "owner": "Wilson",
+        "what": "Week-one pack: do-not-contact list, target brief, approved claims, demo pieces, booking link",
+        "due": "2026-11-05",
+        "status": "open",
+        "source": "email 2026-10-30; plan s6",
+        "late": false
+      },
+      {
+        "id": "w-counsel",
+        "group": "owed",
+        "from": "Wilson",
+        "owner": "Wilson",
+        "what": "Lawyer reads the agreement and a sample email",
+        "due": "2026-11-05",
+        "status": "open",
+        "source": "plan s6",
+        "late": false
+      },
+      {
+        "id": "w-apollo",
+        "group": "owed",
+        "from": "Wilson",
+        "owner": "Wilson",
+        "what": "First 5,000 contacts from Wilson's Apollo",
+        "due": "2026-11-13",
+        "status": "open",
+        "note": "Deferred on the Nov 4 call. Not needed for the pilot.",
+        "source": "plan s2",
+        "late": false
+      },
+      {
+        "id": "w-bios",
+        "group": "owed",
+        "from": "Wilson",
+        "owner": "Gary",
+        "what": "Founder bios and proof for the domain pages, or approve drafts",
+        "due": "2026-11-13",
+        "status": "open",
+        "source": "plan s6",
+        "late": false
+      },
+      {
+        "id": "w-approve",
+        "group": "owed",
+        "from": "Demetri",
+        "owner": "Wilson and Gary",
+        "what": "Approve the first list and templates, inside two business days",
+        "due": "2026-11-13",
+        "status": "open",
+        "note": "Approval pack ready: 3 drafts, 20 leads, one question on advisers. Goes to Wilson and Gary once the three accounts exist and the dashboard link is shared.",
+        "source": "plan s4, s6",
+        "late": false
+      },
+      {
+        "id": "w-go",
+        "group": "owed",
+        "from": "Demetri",
+        "owner": "Wilson",
+        "what": "Go or no-go on the Nov 23 send",
+        "due": "2026-11-20",
+        "status": "open",
+        "source": "plan s4, s6",
+        "late": false
+      },
+      {
+        "id": "s-commission",
+        "group": "settled",
+        "what": "Demetri earns 20% of every activation he brings in, $2,000 on a $10,000 activation, and it keeps paying after the test",
+        "source": "email",
+        "date": "2026-10-28",
+        "by": "Wilson",
+        "late": false
+      },
+      {
+        "id": "s-extra-mailbox",
+        "group": "settled",
+        "what": "If Google flags the first mailbox, the Company pays for another. Demetri gives a heads-up first",
+        "source": "email",
+        "date": "2026-10-30",
+        "by": "Wilson",
+        "late": false
+      },
+      {
+        "id": "s-pause",
+        "group": "settled",
+        "what": "The test clock pauses December 24 to 29",
+        "source": "email",
+        "date": "2026-10-30",
+        "by": "Wilson",
+        "late": false
+      },
+      {
+        "id": "s-refund",
+        "group": "settled",
+        "what": "Refund window is 30 days from the member's activation day. Commission pays within ten business days after it closes",
+        "source": "email",
+        "date": "2026-10-30",
+        "by": "Wilson",
+        "late": false
+      },
+      {
+        "id": "s-lookalike",
+        "group": "settled",
+        "what": "Send from separate state Gmail accounts so supersuit.co stays safe",
+        "source": "agreement",
+        "date": "2026-11-04",
+        "by": "Demetri and Wilson",
+        "late": false
+      },
+      {
+        "id": "s-company-registers",
+        "group": "settled",
+        "what": "Demetri creates the three Gmail accounts for the Company, and the Company holds every login (6.9)",
+        "source": "agreement",
+        "date": "2026-11-04",
+        "by": "Agreement",
+        "late": false
+      },
+      {
+        "id": "s-ramp",
+        "group": "settled",
+        "what": "Volume goes in the agreement as a ramp with a stop rule (6.10), not a flat 400 a day",
+        "source": "email",
+        "date": "2026-10-30",
+        "by": "Wilson",
+        "late": false
+      },
+      {
+        "id": "s-not-chatbot",
+        "group": "settled",
+        "what": "Never describe Supersuit as a chatbot",
+        "source": "email",
+        "date": "2026-10-30",
+        "by": "Wilson",
+        "late": false
+      },
+      {
+        "id": "s-domains",
+        "group": "settled",
+        "what": "Sending accounts: three free Gmail accounts, one per state, full state names, no other addresses",
+        "source": "agreement",
+        "date": "2026-11-04",
+        "by": "Agreement",
+        "late": false
+      },
+      {
+        "id": "s-states",
+        "group": "settled",
+        "what": "Texas, Florida and Illinois, whole states. California waits",
+        "source": "call",
+        "date": "2026-11-01",
+        "by": "Demetri and Wilson",
+        "late": false
+      },
+      {
+        "id": "s-owners",
+        "group": "settled",
+        "what": "Owners running their own companies are the first audience",
+        "source": "call",
+        "date": "2026-11-01",
+        "by": "Demetri and Wilson",
+        "late": false
+      },
+      {
+        "id": "s-ups",
+        "group": "settled",
+        "what": "A UPS Store box is the footer address",
+        "source": "call",
+        "date": "2026-11-01",
+        "by": "Demetri and Wilson",
+        "late": false
+      },
+      {
+        "id": "s-first-calls",
+        "group": "settled",
+        "what": "Demetri joins the first sales calls, then takes first calls alone later by a founder's email",
+        "source": "call",
+        "date": "2026-11-01",
+        "by": "Demetri and Wilson",
+        "late": false
+      },
+      {
+        "id": "s-no-links",
+        "group": "settled",
+        "what": "No links in the emails. Demetri's call, Wilson is fine with it",
+        "source": "plan",
+        "date": "2026-11-02",
+        "by": "Wilson",
+        "late": false
+      },
+      {
+        "id": "s-costs",
+        "group": "settled",
+        "what": "No domains or paid mailboxes. Demetri pays his own tools and data, the Company pays its postal box",
+        "source": "agreement",
+        "date": "2026-11-04",
+        "by": "Agreement",
+        "late": false
+      },
+      {
+        "id": "s-tags",
+        "group": "settled",
+        "what": "Every reply gets one tag: interested, not now, wrong person, forwarded, no, unsubscribe",
+        "source": "plan",
+        "date": "2026-11-02",
+        "by": "Wilson",
+        "late": false
+      },
+      {
+        "id": "s-friday",
+        "group": "settled",
+        "what": "Fridays, 15 minutes, from Nov 6: numbers, what we learned, what changes next week",
+        "source": "plan",
+        "date": "2026-11-02",
+        "by": "Wilson",
+        "late": false
+      },
+      {
+        "id": "c1",
+        "group": "calls",
+        "what": "How long is the test?",
+        "status": "open",
+        "rec": "90 days from first send, through Fri Feb 26",
+        "position": "Signed as written: the clock starts at the first email.",
+        "late": false
+      },
+      {
+        "id": "c2",
+        "group": "calls",
+        "what": "How many mailboxes and domains?",
+        "status": "done",
+        "rec": "Three free Gmail accounts, one per state",
+        "position": "Agreed in the live agreement",
+        "late": false
+      },
+      {
+        "id": "c3",
+        "group": "calls",
+        "what": "Who is the sender?",
+        "status": "done",
+        "rec": "Demetri, under his own name, for Supersuit",
+        "position": "In the agreement: Demetri Panagiotou, Continental Works, no title",
+        "late": false
+      },
+      {
+        "id": "c4",
+        "group": "calls",
+        "what": "Is \"by invitation only\" true for a cold email?",
+        "status": "drafted",
+        "rec": "Don't use it",
+        "position": "Agree, drop it",
+        "late": false
+      },
+      {
+        "id": "c5",
+        "group": "calls",
+        "what": "Who answers replies, and how fast?",
+        "status": "open",
+        "rec": "Demetri, inside two business hours. Price, data or scope goes to a founder the same day",
+        "position": null,
+        "late": false
+      },
+      {
+        "id": "c6",
+        "group": "calls",
+        "what": "Start warm-up before signing?",
+        "status": "done",
+        "rec": "Yes",
+        "position": "No. Accounts are made after signing, 24 hours of warm-up each",
+        "late": false
+      },
+      {
+        "id": "c7",
+        "group": "calls",
+        "what": "Commission on a forward from Demetri's email?",
+        "status": "open",
+        "rec": "Yes, when traceable",
+        "position": null,
+        "late": false
+      },
+      {
+        "id": "c8",
+        "group": "calls",
+        "what": "Can getsupersuit.com send? Gary's call",
+        "status": "open",
+        "rec": "Keep it out",
+        "position": null,
+        "late": false
+      },
+      {
+        "id": "s-signed",
+        "group": "settled",
+        "what": "Agreement signed. Three free Gmail accounts, one per state, no domains or paid mailboxes",
+        "source": "call 2026-11-04",
+        "date": "2026-11-04",
+        "by": "Wilson and Demetri",
+        "late": false
+      },
+      {
+        "id": "s-signature",
+        "group": "settled",
+        "what": "Emails sign Demetri Panagiotou, Continental Works, no title, then the STOP line and the UPS box address",
+        "source": "call 2026-11-04",
+        "date": "2026-11-04",
+        "by": "Wilson and Demetri",
+        "late": false
+      },
+      {
+        "id": "s-nora",
+        "group": "settled",
+        "what": "Nora's testimonial trimmed to 30 to 40 seconds from \"I run a $10 million fund\". The email says Nora, one of our members, recorded this",
+        "source": "call 2026-11-04",
+        "date": "2026-11-04",
+        "by": "Wilson and Demetri",
+        "late": false
+      },
+      {
+        "id": "s-goal",
+        "group": "settled",
+        "what": "Goal: at least six paid activations. No penalty if missed",
+        "source": "call 2026-11-04",
+        "date": "2026-11-04",
+        "by": "Wilson and Demetri",
+        "late": false
+      },
+      {
+        "id": "w-accounts",
+        "group": "owed",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Create the three state Gmail accounts, each with a state flag picture, warm them 24 hours, share access by password manager",
+        "due": "2026-11-05",
+        "status": "open",
+        "source": "call 2026-11-04",
+        "late": false
+      },
+      {
+        "id": "w-nora",
+        "group": "owed",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Trim Nora's testimonial to 30 to 40 seconds",
+        "due": "2026-11-06",
+        "status": "open",
+        "source": "call 2026-11-04",
+        "late": false
+      },
+      {
+        "id": "w-page-edits",
+        "group": "owed",
+        "from": "Wilson",
+        "owner": "Demetri",
+        "what": "Edits to the what-is-a-Supersuit page",
+        "due": "2026-11-06",
+        "status": "open",
+        "source": "call 2026-11-04",
+        "late": false
+      },
+      {
+        "id": "w-page-update",
+        "group": "owed",
+        "from": "Demetri",
+        "owner": "Wilson and Gary",
+        "what": "Update the what-is-a-Supersuit page with Demetri's edits",
+        "status": "open",
+        "blocked_by": "w-page-edits",
+        "source": "call 2026-11-04",
+        "late": false
+      }
+    ],
+    "asked": {
+      "total": 20,
+      "done": 10,
+      "drafted": 3,
+      "late": 6
+    },
+    "owed": {
+      "total": 19,
+      "done": 5,
+      "drafted": 0,
+      "late": 4
+    },
+    "calls": {
+      "total": 8,
+      "done": 3,
+      "drafted": 1,
+      "late": 0
+    },
+    "settled": 21
+  }
+}</script>
+
+<div class="banner" id="banner" hidden>
+  <div class="banner-in">
+    <span>Sample data, not real<span class="bn-long">. Every number on this page is made up to show the design</span>.</span>
+    <button type="button" id="bannerOff">Show real numbers</button>
+  </div>
+</div>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <p class="eyebrow">Continental Works LLC · Cold email test</p>
+      <h1>The <span class="sixty">90</span>-Day Clock</h1>
+    </div>
+    <div class="controls">
+      <div class="statusrow">
+        <span class="pill" id="pill"><i></i><span id="pillText">Day 0 of 90</span></span>
+      </div>
+      <p class="statustext" id="statusText"></p>
+      <p class="asof" id="asOf"></p>
+      <label class="switch" for="sampleToggle">
+        <input type="checkbox" id="sampleToggle">
+        <span class="track" aria-hidden="true"></span>
+        <span>Preview with sample data (not real)</span>
+      </label>
+    </div>
+  </header>
+
+  <main class="grid">
+    <section class="clockcol" aria-label="The 90-day clock">
+      <div class="dial" id="dial" tabindex="0" role="group" aria-label="90-day clock. Use the arrow keys to move between days, up and down to move between weeks, Escape for all 90 days.">
+        <svg id="dialSvg" viewBox="0 0 460 460" aria-hidden="true"></svg>
+        <button type="button" class="center" id="centerBtn" aria-label="Show all 90 days">
+          <span class="c-label" id="cLabel">Day</span>
+          <span class="c-num" id="cNum">0</span>
+          <span class="c-of" id="cOf">of 90</span>
+          <span class="c-sub" id="cSub">Starts on the first send</span>
+        </button>
+      </div>
+
+      <ul class="legend" aria-label="How to read the clock">
+        <li><svg viewBox="0 0 14 14"><rect x="3" y="1" width="8" height="12" rx="1.5" fill="var(--send)"/></svg>Emails sent that day</li>
+        <li><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="3.2" fill="var(--reply)"/></svg>A reply</li>
+        <li><svg viewBox="0 0 14 14"><path d="M7 2.5 11.5 7 7 11.5 2.5 7Z" fill="var(--booked)"/></svg>A booked call</li>
+        <li><svg viewBox="0 0 14 14"><circle cx="7" cy="7" r="5" fill="var(--glow)" opacity=".8"/></svg>Today</li>
+      </ul>
+
+      <div class="scopebar">
+        <button type="button" class="step" id="prevBtn" aria-label="Previous">&#8249;</button>
+        <div class="seg" role="group" aria-label="What the numbers cover">
+          <button type="button" id="kDay" aria-pressed="false">Day</button>
+          <button type="button" id="kWeek" aria-pressed="false">Week</button>
+          <button type="button" id="kAll" aria-pressed="true">All 90 days</button>
+        </div>
+        <button type="button" class="step" id="nextBtn" aria-label="Next">&#8250;</button>
+      </div>
+      <p class="scope-note" id="scopeNote" aria-live="polite"></p>
+
+      <div class="waiting" id="waiting" hidden>
+        <h3>Before day 1</h3>
+        <ul id="checklist"></ul>
+      </div>
+    </section>
+
+    <section class="datacol">
+      <article class="sec" id="secLedger" hidden>
+        <header class="sec-h"><h2>Questions and decisions</h2><span class="sec-meta"><span class="scope-tag" id="lgTag"></span></span></header>
+        <p class="fhint">Everything Wilson, Gary and Demetri have asked each other, promised, or settled in writing, from the email thread, the working plan and the Nov 1 call. Tap a box to switch lists.</p>
+        <div class="lg-sum" id="lgSum" role="group" aria-label="Which list"></div>
+        <ul class="lg" id="lgList" aria-live="polite"></ul>
+      </article>
+
+      <article class="sec" id="secQuota">
+        <header class="sec-h"><h2>Quota</h2><span class="sec-meta"><span class="sample-tag">Sample</span><span class="scope-tag" id="qTag"></span></span></header>
+        <p class="fhint">First emails to new people against the plan. The day and the week are both counted.</p>
+        <ul class="inv" id="qList"></ul>
+        <p class="fnote" id="qNote"></p>
+      </article>
+
+      <article class="sec weekly" id="secWeekly">
+        <header class="sec-h"><h2>The weekly read</h2><span class="sec-meta"><span class="sample-tag">Sample</span><span class="scope-tag" id="wTag"></span></span></header>
+        <div class="weekly-tabs" id="wTabs" role="group" aria-label="Pick a week"></div>
+        <div class="story">
+          <h3 id="wHead"></h3>
+          <p class="deck" id="wDeck"></p>
+          <div class="body" id="wBody"></div>
+          <div class="nextweek"><b>What changes next week</b><p id="wNext"></p></div>
+        </div>
+        <div class="sevenhead"><h4>The numbers</h4><span id="sevenNote"></span></div>
+        <div class="tablewrap7">
+          <table class="seven">
+            <thead><tr><th scope="col">Line</th><th scope="col">This week</th><th scope="col">Last week</th><th scope="col">Change</th><th scope="col" class="spk">By week</th></tr></thead>
+            <tbody id="sevenBody"></tbody>
+          </table>
+        </div>
+      </article>
+
+      <article class="sec" id="secFunnel">
+        <header class="sec-h"><h2>Approved to paid</h2><span class="sec-meta"><span class="sample-tag">Sample</span><span class="scope-tag" data-scope></span></span></header>
+        <p class="empty" id="fEmpty" hidden></p>
+        <div id="fWrap">
+          <p class="fhint">The % on each line between two stages is the share that got through. The figure under it is what dropped off.</p>
+          <ol class="fun" id="fun"></ol>
+          <p class="fnote" id="fNote"></p>
+        </div>
+      </article>
+
+      <article class="sec" id="secReplies">
+        <header class="sec-h"><h2>Replies and hygiene</h2><span class="sec-meta"><span class="sample-tag">Sample</span><span class="scope-tag" data-scope></span></span></header>
+        <p class="empty" id="rEmpty">No replies yet. They show here as they come in.</p>
+        <div class="stack" aria-hidden="true"><span class="c-int" id="sInt"></span><span class="c-stop" id="sStop"></span><span class="c-ooo" id="sOoo"></span><span class="c-oth" id="sOth"></span></div>
+        <ul class="rlist">
+          <li><span class="lbl"><i class="sw c-int"></i>Interested</span><span class="mid" id="rInt">0</span></li>
+          <li><span class="lbl"><i class="sw c-stop"></i>STOP</span><span class="mid" id="rStop">0</span></li>
+          <li><span class="lbl"><i class="sw c-ooo"></i>Out of office</span><span class="mid" id="rOoo">0</span></li>
+          <li><span class="lbl"><i class="sw c-oth"></i>Other</span><span class="mid" id="rOth">0</span></li>
+        </ul>
+        <div class="hyg">
+          <div><span class="lbl">Bounces</span><span class="mid" id="hB">0</span><span class="sub" id="hBS">of emails sent</span></div>
+          <div><span class="lbl">STOP requests</span><span class="mid" id="hS">0</span><span class="sub" id="hSS">never emailed again</span></div>
+          <div><span class="lbl">Opens</span><span class="mid" id="hO">0</span><span class="sub" id="hOS">of delivered</span></div>
+          <div><span class="lbl">Clicks</span><span class="mid" id="hC">0</span><span class="sub" id="hCS">of delivered</span></div>
+        </div>
+      </article>
+
+      <article class="sec" id="secInv">
+        <header class="sec-h"><h2>Contacts by audience</h2><span class="sec-meta"><span class="sample-tag">Sample</span><span class="scope-tag" id="invTag">Right now</span></span></header>
+        <ul class="inv" id="inv"></ul>
+        <div class="invkey">
+          <span><i class="sw ib-left"></i>Approved, not yet emailed</span>
+          <span><i class="sw ib-used"></i>Emailed in this test</span>
+          <span><i class="sw ib-held"></i>On hold for later</span>
+        </div>
+        <div class="inv-total" id="invTotal"></div>
+      </article>
+
+      <article class="sec" id="secTests">
+        <header class="sec-h"><h2>Tests</h2><span class="sec-meta"><span class="sample-tag">Sample</span><span class="scope-tag" data-scope></span></span></header>
+        <p class="empty" id="tEmpty">No tests running yet. Subject lines and angles show here after the first sends.</p>
+        <div class="tablewrap" id="tWrap" hidden>
+          <table class="tt">
+            <thead><tr><th scope="col">Angle</th><th scope="col">Sent</th><th scope="col">Reply rate</th><th scope="col">Positive</th><th scope="col">Booked</th></tr></thead>
+            <tbody id="tBody"></tbody>
+          </table>
+        </div>
+      </article>
+    </section>
+  </main>
+  <dialog class="lineDlg" id="lineDlg" aria-labelledby="lineDlgH"><header><h3 id="lineDlgH"></h3><button type="button" class="x" id="lineDlgX">Close</button></header><div class="dlgBody" id="lineDlgBody"></div></dialog>
+
+  <footer>
+    <p><strong>Counts only.</strong> No prospect names, emails or companies appear on this page.</p>
+    <p>Positive reply rate is interested replies as a share of delivered emails. Weeks run seven days from day 1.</p>
+    <div id="gapsWrap" hidden><p>Not tracked yet:</p><ul id="gaps"></ul></div>
+  </footer>
+</div>
+
+<script>
+(function(){
+  "use strict";
+  var N = 90, DEG = 360 / N, CX = 230, CY = 230, R0 = 148, R1 = 186, WEEKS = Math.ceil(N / 7);
+  var reduce = !!(window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches);
+  var $ = function(id){ return document.getElementById(id); };
+  var MINUS = "−";
+  function fmt(n){ var v = Math.round(n); return (v < 0 ? MINUS : "") + Math.abs(v).toLocaleString("en-US"); }
+  function pct(a, b){ return b ? (a / b * 100).toFixed(1) + "%" : "n/a"; }
+  function esc(s){ return String(s == null ? "" : s).replace(/[&<>"']/g, function(c){ return {"&":"&amp;","<":"&lt;",">":"&gt;","\"":"&quot;","'":"&#39;"}[c]; }); }
+  function pl(n, one, many){ return n === 1 ? one : many; }
+  function lowerFirst(s){ s = String(s); return s.charAt(0).toLowerCase() + s.slice(1); }
+  function joinAnd(a){ return a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1]; }
+  var WORDS = ["No","One","Two","Three","Four","Five","Six"];
+
+  /* ================= Data: normalize any counts document ================= */
+  var STD = ["first","follow","bounced","opened","clicked","interested","stop","ooo","other","booked","held","paid"];
+  function num(v){ v = +v; return isFinite(v) && v > 0 ? v : 0; }
+  function blankDay(d, invKeys, angKeys){
+    var o = {d:d, ang:{}, sent:0, delivered:0, replies:0};
+    STD.forEach(function(k){ o[k] = 0; });
+    invKeys.forEach(function(k){ o[k] = 0; });
+    angKeys.forEach(function(a){ o.ang[a] = {sent:0, replies:0, positive:0, booked:0}; });
+    return o;
+  }
+  function normalize(raw){
+    if (typeof raw === "string"){ try { raw = JSON.parse(raw); } catch (e){ return null; } }
+    if (!raw || typeof raw !== "object" || Array.isArray(raw)) return null;
+    var inv = (Array.isArray(raw.inventory) ? raw.inventory : []).filter(function(x){
+      return x && typeof x.key === "string" && /^[A-Za-z_][\w]*$/.test(x.key) && STD.indexOf(x.key) < 0;
+    }).map(function(x){ return {key:x.key, name:String(x.name || x.key), approved:num(x.approved), onHold:num(x.onHold)}; });
+    var invKeys = inv.map(function(x){ return x.key; });
+    var angles = null, angKeys = [];
+    if (raw.angles && typeof raw.angles === "object" && !Array.isArray(raw.angles)){
+      angKeys = Object.keys(raw.angles).slice(0, 12);
+      if (angKeys.length){
+        angles = {};
+        angKeys.forEach(function(a){ var m = raw.angles[a] || {}; angles[a] = {name:String(m.name || a), subj:String(m.subj || "")}; });
+      }
+    }
+    var days = [];
+    for (var i = 1; i <= N; i++) days.push(blankDay(i, invKeys, angKeys));
+    var maxD = 0;
+    (Array.isArray(raw.days) ? raw.days : []).forEach(function(r){
+      if (!r || typeof r !== "object") return;
+      var d = Math.floor(num(r.d));
+      if (d < 1 || d > N) return;
+      maxD = Math.max(maxD, d);
+      var o = days[d - 1];
+      STD.concat(invKeys).forEach(function(k){ o[k] = num(r[k]); });
+      if (r.ang && typeof r.ang === "object") angKeys.forEach(function(a){
+        var x = r.ang[a] || {};
+        o.ang[a] = {sent:num(x.sent), replies:num(x.replies), positive:num(x.positive), booked:num(x.booked)};
+      });
+    });
+    var gapList = (Array.isArray(raw.gaps) ? raw.gaps : []).filter(function(g){ return typeof g === "string" && g.trim(); });
+    var noBounces = gapList.some(function(g){ return /bounce/i.test(g); });
+    days.forEach(function(o){
+      if (noBounces) o.bounced = 0;
+      o.sent = o.first + o.follow;
+      o.delivered = Math.max(0, o.sent - o.bounced);
+      o.replies = o.interested + o.stop + o.ooo + o.other;
+    });
+    var today = raw.day == null ? maxD : Math.min(N, Math.floor(num(raw.day)));
+    var gaps = (Array.isArray(raw.gaps) ? raw.gaps : []).filter(function(g){ return typeof g === "string" && g.trim(); });
+    var quota = [];
+    for (var qi = 0; qi < N; qi++) quota.push(num(Array.isArray(raw.quota) ? raw.quota[qi] : 0));
+    var share = {};
+    invKeys.forEach(function(k){ share[k] = num(raw.regionShare && raw.regionShare[k]); });
+    var pilot = raw.pilot && typeof raw.pilot === "object" ? raw.pilot : null;
+    return {
+      quota: quota,
+      share: share,
+      pilot: pilot ? {first:num(pilot.first), quota:num(pilot.quota), opened:num(pilot.opened), bounced:num(pilot.bounced),
+        replies:num(pilot.interested) + num(pilot.stop) + num(pilot.ooo) + num(pilot.other), interested:num(pilot.interested)} : null,
+      opensUntracked: gaps.some(function(g){ return /open/i.test(g); }),
+      clicksUntracked: gaps.some(function(g){ return /click/i.test(g); }),
+      asOf: typeof raw.asOf === "string" ? raw.asOf : null,
+      testStart: typeof raw.testStart === "string" && /^\d{4}-\d{2}-\d{2}$/.test(raw.testStart) ? raw.testStart : null,
+      today: today,
+      status: typeof raw.status === "string" ? raw.status : "",
+      checklist: (Array.isArray(raw.checklist) ? raw.checklist : []).filter(function(c){ return c && c.label; })
+        .map(function(c){ return {label:String(c.label), done:c.state === "done"}; }),
+      days: days,
+      inv: inv,
+      angles: angles,
+      angKeys: angKeys,
+      next: raw.next && typeof raw.next === "object" ? raw.next : {},
+      ledger: raw.ledger && typeof raw.ledger === "object" && Array.isArray(raw.ledger.items) ? raw.ledger : null,
+      gaps: gaps,
+      bounceUntracked: gaps.some(function(g){ return /bounce/i.test(g); }),
+      messages: (Array.isArray(raw.messages) ? raw.messages : []).filter(function(m){ return m && typeof m.who === "string"; })
+    };
+  }
+
+  /* The real counts: the inline copy first, the live document later. */
+  var REAL = null;
+  try { REAL = normalize(JSON.parse($("fallback").textContent)); } catch (e){ REAL = null; }
+  if (!REAL) REAL = normalize({day:0, status:"The counts could not be read. Nothing below is current.", days:[]});
+  var source = "saved";
+
+  /* ================= Sample: seeded, generated in the page, never from the db ================= */
+  function rng(seed){
+    return function(){
+      seed |= 0; seed = seed + 0x6D2B79F5 | 0;
+      var t = Math.imul(seed ^ seed >>> 15, 1 | seed);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function buildSample(){
+    var r = rng(60023), today = 23, ANG = ["A","B","C","D"];
+    var inv = [{key:"firstTX", name:"Texas", approved:5200, onHold:80}, {key:"firstFL", name:"Florida", approved:5100, onHold:40}, {key:"firstIL", name:"Illinois", approved:2600, onHold:20}];
+    var left = inv.map(function(x){ return x.approved; });
+    var share = [.4, .4, .2];
+    var days = [], firstHist = [], k = 0;
+    var ramp = [100,150,200,250,300,350,400,450,500];
+    var sampleQuota = []; for (var qd = 1, qk = 0; qd <= N; qd++){ sampleQuota.push(((qd - 1) % 7) === 6 ? 0 : ramp[Math.min(qk++, ramp.length - 1)]); }
+    var angShare = {A:.25, B:.25, C:.25, D:.25}, replyW = {A:.34, B:.28, C:.16, D:.22}, posW = {A:.42, B:.28, C:.1, D:.2};
+    function pick(w){ var x = r(), s = 0; for (var i = 0; i < ANG.length; i++){ s += w[ANG[i]]; if (x < s) return ANG[i]; } return "D"; }
+    for (var d = 1; d <= today; d++){
+      var o = {d:d, first:0, follow:0, bounced:0, opened:0, clicked:0, interested:0, stop:0, ooo:0, other:0, booked:0, held:0, paid:0, ang:{}};
+      inv.forEach(function(x){ o[x.key] = 0; });
+      ANG.forEach(function(a){ o.ang[a] = {sent:0, replies:0, positive:0, booked:0}; });
+      days.push(o);
+    }
+    for (d = 1; d <= today; d++){
+      o = days[d - 1];
+      var weekend = ((d - 1) % 7) === 6;
+      if (!weekend){
+        var target = Math.round(sampleQuota[d - 1] * (d === 9 ? .82 : .97 + r() * .05));
+        inv.forEach(function(x, i){ var n = Math.min(left[i], Math.round(target * share[i])); left[i] -= n; o[x.key] = n; o.first += n; });
+        var f1 = k >= 3 ? Math.round(firstHist[k - 3] * .9) : 0;
+        var f2 = 0; /* one follow-up per person */
+        o.follow = f1 + f2; firstHist.push(o.first); k++;
+        var sent = o.first + o.follow;
+        o.bounced = Math.max(0, Math.round(o.first * .017 + r() * 1.4 - .4));
+        o.opened = Math.round((sent - o.bounced) * (.38 + r() * .1)); o.clicked = Math.round(o.opened * .04 * r());
+        var rest = sent;
+        ["A","B","C"].forEach(function(a){ var v = Math.round(sent * angShare[a]); o.ang[a].sent = v; rest -= v; });
+        o.ang.D.sent = rest;
+      }
+      var prev = days.slice(Math.max(0, d - 4), d - 1).reduce(function(s, x){ return s + x.first + x.follow - x.bounced; }, 0);
+      var rep = Math.max(0, Math.round(prev / 3 * .042 + (r() - .5) * 2));
+      for (var i = 0; i < rep; i++){
+        var x = r();
+        var cat = x < .26 ? "interested" : x < .45 ? "stop" : x < .74 ? "ooo" : "other";
+        o[cat]++;
+        var a = pick(cat === "interested" ? posW : replyW);
+        o.ang[a].replies++;
+        if (cat === "interested"){
+          o.ang[a].positive++;
+          if (r() < .58){
+            var bd = d + 1 + Math.floor(r() * 3);
+            if (bd <= today){
+              days[bd - 1].booked++; days[bd - 1].ang[a].booked++;
+              if (r() < .82){ var hd = bd + 2 + Math.floor(r() * 4); if (hd <= today) days[hd - 1].held++; }
+            }
+          }
+        }
+      }
+    }
+    var fh = days.findIndex(function(x){ return x.held > 0; });
+    if (fh >= 0) days[Math.min(today, fh + 5) - 1].paid = 1;
+    return normalize({
+      asOf: null, testStart: "2026-11-23", day: today, quota: sampleQuota, regionShare: {firstTX:.4, firstFL:.4, firstIL:.2},
+      status: "Sending on schedule. Mailboxes warm and healthy.",
+      checklist: [{label:"Signed agreement", state:"done"}, {label:"Mailbox warm-up", state:"done"}],
+      days: days, inventory: inv,
+      angles: {
+        A: {name:"Your work keeps moving", subj:""},
+        B: {name:"The role you'd hire next", subj:""},
+        C: {name:"Work and health in one system", subj:""},
+        D: {name:"Your judgment, on your own computer", subj:""}
+      },
+      next: {
+        1: "Warm-up is holding. Raise first emails from about 25 to 40 a day.",
+        2: "Option C trails on replies. Cut its share to 10% and give the rest to option A.",
+        3: "Illinois runs low in week 5. Approve the next Illinois batch, or move its share to Texas and Florida."
+      },
+      gaps: []
+    });
+  }
+  var SAMPLE = null;
+
+  var state = { sample:false, kind:"all", day:1, week:1 };
+  function D(){ return state.sample ? SAMPLE : REAL; }
+
+  /* ================= Dates ================= */
+  function dateOf(d){
+    var data = D();
+    if (!data.testStart) return "";
+    var p = data.testStart.split("-");
+    var t = new Date(Date.UTC(+p[0], +p[1] - 1, +p[2] + d - 1));
+    if (t >= Date.UTC(2026, 11, 24)) t = new Date(+t + 6 * 86400000); /* the test clock pauses December 24 through 29 */
+    try { return t.toLocaleDateString("en-US", {timeZone:"UTC", weekday:"short", month:"short", day:"numeric"}); } catch (e){ return ""; }
+  }
+  function centralTime(iso){
+    var t = new Date(iso);
+    if (!iso || isNaN(t)) return "";
+    try {
+      return t.toLocaleString("en-US", {timeZone:"America/Chicago", weekday:"short", month:"short", day:"numeric", hour:"numeric", minute:"2-digit", timeZoneName:"short"});
+    } catch (e){ return t.toUTCString(); }
+  }
+
+  /* ================= Dial geometry ================= */
+  function pt(r, a){ var t = (a - 90) * Math.PI / 180; return [CX + r * Math.cos(t), CY + r * Math.sin(t)]; }
+  function sector(r0, r1, a0, a1){
+    var p0 = pt(r1, a0), p1 = pt(r1, a1), p2 = pt(r0, a1), p3 = pt(r0, a0), lg = (a1 - a0) > 180 ? 1 : 0;
+    return "M" + p0[0].toFixed(2) + " " + p0[1].toFixed(2) + "A" + r1 + " " + r1 + " 0 " + lg + " 1 " + p1[0].toFixed(2) + " " + p1[1].toFixed(2) +
+      "L" + p2[0].toFixed(2) + " " + p2[1].toFixed(2) + "A" + r0 + " " + r0 + " 0 " + lg + " 0 " + p3[0].toFixed(2) + " " + p3[1].toFixed(2) + "Z";
+  }
+  function cellA(d){ return [(d - 1) * DEG + .5, d * DEG - .5]; }
+  function weekRange(w){ return [w * 7 - 6, Math.min(w * 7, N)]; }
+  function weekOf(d){ return Math.max(1, Math.ceil(d / 7)); }
+
+  var NS = "http://www.w3.org/2000/svg";
+  function el(tag, attrs, parent){ var e = document.createElementNS(NS, tag); for (var k in attrs) e.setAttribute(k, attrs[k]); if (parent) parent.appendChild(e); return e; }
+  var svg = $("dialSvg");
+  var defs = el("defs", {}, svg);
+  var gf = el("filter", {id:"glow", x:"-60%", y:"-60%", width:"220%", height:"220%"}, defs);
+  el("feGaussianBlur", {stdDeviation:"5"}, gf);
+  el("circle", {cx:CX, cy:CY, r:229, "class":"face"}, svg);
+  var weekBand = el("path", {"class":"sel", d:""}, svg);
+  var glow = el("path", {"class":"todayglow", d:""}, svg);
+  var cellsG = el("g", {}, svg);
+  var cells = [];
+  for (var cd = 1; cd <= N; cd++){
+    var ca = cellA(cd);
+    var g = el("g", {"class":"cell", "data-day":cd}, cellsG);
+    var tr = el("path", {"class":"cell-track", d:sector(R0, R1, ca[0], ca[1])}, g);
+    var fl = el("path", {"class":"cell-fill", d:""}, g);
+    var mk = el("g", {}, g);
+    var hit = el("path", {"class":"cell-hit", d:sector(R0 - 6, 216, ca[0] - .8, ca[1] + .8)}, g);
+    var tt = el("title", {}, hit);
+    cells.push({g:g, track:tr, fill:fl, marks:mk, title:tt});
+  }
+  var todayEdge = el("path", {"class":"todayedge", d:""}, svg);
+  var selPath = el("path", {"class":"sel", d:"", fill:"none"}, svg);
+  [1,15,30,45,60,75].forEach(function(dd){
+    var p = pt(221, (dd - 1) * DEG + DEG / 2);
+    el("text", {"class":"daylbl", x:p[0].toFixed(1), y:p[1].toFixed(1)}, svg).textContent = dd;
+  });
+  el("circle", {cx:CX, cy:CY, r:136, "class":"face-inner"}, svg);
+  var wkEls = [];
+  for (var w = 1; w <= WEEKS; w++){
+    var wr = weekRange(w), a0 = (wr[0] - 1) * DEG + 1.2, a1 = wr[1] * DEG - 1.2;
+    var wp = el("path", {"class":"wk", d:sector(118, 132, a0, a1), "data-week":w}, svg);
+    el("title", {}, wp).textContent = "Week " + w + ", days " + wr[0] + " to " + wr[1];
+    var mp = pt(125, (a0 + a1) / 2);
+    var wl = el("text", {"class":"wklbl", x:mp[0].toFixed(1), y:mp[1].toFixed(1)}, svg);
+    wl.textContent = "W" + w;
+    wkEls.push({p:wp, l:wl});
+  }
+  var hand = el("line", {"class":"hand", x1:CX, y1:CY, x2:CX, y2:CY - 140}, svg);
+  var handTip = el("circle", {"class":"hand-tip", cx:CX, cy:CY - 140, r:3.4}, svg);
+  var startLbl = el("text", {"class":"startlbl", x:CX, y:CY - 152}, svg);
+  startLbl.textContent = "START";
+
+  function setHand(angle, idle){
+    var p1 = pt(96, angle), p2 = pt(140, angle);
+    hand.setAttribute("x1", p1[0]); hand.setAttribute("y1", p1[1]);
+    hand.setAttribute("x2", p2[0]); hand.setAttribute("y2", p2[1]);
+    handTip.setAttribute("cx", p2[0]); handTip.setAttribute("cy", p2[1]);
+    hand.setAttribute("class", "hand" + (idle ? " idle" : ""));
+    handTip.setAttribute("class", "hand-tip" + (idle ? " idle" : ""));
+  }
+  function ease(p){ return 1 - Math.pow(1 - p, 3); }
+  function drawCells(progress){
+    var data = D(), maxSent = 1;
+    data.days.forEach(function(x){ if (x.d <= data.today) maxSent = Math.max(maxSent, x.sent); });
+    for (var i = 0; i < N; i++){
+      var d = i + 1, o = data.days[i], c = cells[i], a = cellA(d);
+      var p = Math.max(0, Math.min(1, progress - i));
+      var elapsed = d <= data.today && p > 0;
+      c.g.setAttribute("class", "cell" + (elapsed ? " elapsed" : ""));
+      if (elapsed && o.sent > 0){
+        var h = 3 + (R1 - R0 - 3) * (o.sent / maxSent);
+        c.fill.setAttribute("d", sector(R0, R0 + h * ease(p), a[0], a[1]));
+      } else c.fill.setAttribute("d", "");
+      var html = "";
+      if (elapsed && p >= 1){
+        var mid = (a[0] + a[1]) / 2;
+        for (var j = 0; j < Math.min(o.replies, 4); j++){
+          var q = pt(194 + j * 6.2, mid);
+          html += '<circle class="dot' + (j === 3 && o.replies > 4 ? " more" : "") + '" cx="' + q[0].toFixed(1) + '" cy="' + q[1].toFixed(1) + '" r="2.2"/>';
+        }
+        for (var b = 0; b < Math.min(o.booked, 2); b++){
+          var ang = o.booked > 1 ? mid + (b ? 1.7 : -1.7) : mid;
+          var c0 = pt(143.5, ang), s = 2.8, tq = (ang - 90) * Math.PI / 180;
+          var ux = Math.cos(tq), uy = Math.sin(tq), vx = -uy, vy = ux;
+          html += '<path class="bk" d="M' + (c0[0] + ux * s).toFixed(1) + " " + (c0[1] + uy * s).toFixed(1) + "L" + (c0[0] + vx * s).toFixed(1) + " " + (c0[1] + vy * s).toFixed(1) +
+            "L" + (c0[0] - ux * s).toFixed(1) + " " + (c0[1] - uy * s).toFixed(1) + "L" + (c0[0] - vx * s).toFixed(1) + " " + (c0[1] - vy * s).toFixed(1) + 'Z"/>';
+        }
+      }
+      c.marks.innerHTML = html;
+      var dl = dateOf(d);
+      c.title.textContent = d <= data.today
+        ? "Day " + d + (dl ? ", " + dl : "") + ": " + fmt(o.sent) + " sent, " + o.replies + " " + pl(o.replies, "reply", "replies") + ", " + o.booked + " booked"
+        : "Day " + d + (dl ? ", " + dl : "") + ": not reached yet";
+    }
+    var hp = Math.min(progress, data.today);
+    setHand(data.today ? Math.max(0, hp * DEG - DEG / 2) : 0, !data.today);
+    startLbl.style.display = data.today ? "none" : "";
+    if (data.today && progress >= data.today){
+      var ta = cellA(data.today);
+      glow.setAttribute("d", sector(R0 - 4, R1 + 4, ta[0] - 1, ta[1] + 1));
+      todayEdge.setAttribute("d", sector(R0 - 1, R1 + 1, ta[0], ta[1]));
+    } else { glow.setAttribute("d", ""); todayEdge.setAttribute("d", ""); }
+  }
+  var anim = null;
+  function sweep(){
+    var data = D();
+    if (anim) cancelAnimationFrame(anim);
+    anim = null;
+    if (reduce || !data.today){ drawCells(N + 1); return; }
+    var start = null, per = 75, total = data.today * per + 500;
+    function step(ts){
+      if (start === null) start = ts;
+      var t = ts - start;
+      drawCells(Math.min(t / per, data.today + 1));
+      if (t < total) anim = requestAnimationFrame(step); else { drawCells(N + 1); anim = null; }
+    }
+    anim = requestAnimationFrame(step);
+  }
+
+  /* ================= Aggregation ================= */
+  function sum(a, b){
+    var data = D(), invKeys = data.inv.map(function(x){ return x.key; });
+    var t = blankDay(0, invKeys, data.angKeys);
+    var keys = STD.concat(invKeys, ["sent","delivered","replies"]);
+    for (var d = Math.max(1, a); d <= Math.min(b, data.today); d++){
+      var o = data.days[d - 1];
+      keys.forEach(function(k){ t[k] += o[k]; });
+      data.angKeys.forEach(function(g){ for (var k in t.ang[g]) t.ang[g][k] += o.ang[g][k]; });
+    }
+    return t;
+  }
+  function range(){
+    if (state.kind === "day") return [state.day, state.day];
+    if (state.kind === "week") return weekRange(state.week);
+    return [1, N];
+  }
+  function anchor(){
+    var today = D().today;
+    if (state.kind === "day") return state.day;
+    if (state.kind === "week"){ var r = weekRange(state.week); return (today >= r[0] && today <= r[1]) ? today : r[1]; }
+    return today;
+  }
+  function scopeLabel(){
+    if (state.kind === "day"){ var dl = dateOf(state.day); return "Day " + state.day + (dl ? " · " + dl : ""); }
+    if (state.kind === "week"){ var r = weekRange(state.week); return "Week " + state.week + " · days " + r[0] + " to " + r[1]; }
+    return "All " + N + " days";
+  }
+
+  /* ================= Count-up numbers ================= */
+  function setNum(id, v){
+    var e = $(id); if (!e) return;
+    var from = e._v == null ? v : e._v; e._v = v;
+    e.classList.remove("na");
+    e.classList.toggle("zero", v === 0);
+    if (reduce || from === v){ e.textContent = fmt(v); return; }
+    var st = null, dur = 650;
+    function step(ts){
+      if (st === null) st = ts;
+      var p = Math.min(1, (ts - st) / dur);
+      e.textContent = fmt(from + (v - from) * ease(p));
+      if (p < 1) requestAnimationFrame(step);
+    }
+    requestAnimationFrame(step);
+  }
+
+  /* ================= Sparklines ================= */
+  function spark(vals){
+    var w = 64, h = 18, view = 'viewBox="0 0 ' + w + " " + h + '" preserveAspectRatio="none"';
+    if (!vals.length || Math.max.apply(null, vals) === 0){
+      return '<svg class="sk" ' + view + ' aria-hidden="true"><line x1="0" y1="' + (h - 1) + '" x2="' + w + '" y2="' + (h - 1) +
+        '" stroke="var(--muted)" stroke-width="1" stroke-dasharray="2 3" vector-effect="non-scaling-stroke"/></svg>';
+    }
+    var max = Math.max.apply(null, vals), n = Math.max(vals.length, 4), bw = w / n, out = "";
+    var off = (n - vals.length) * bw;
+    vals.forEach(function(v, i){
+      var bh = v ? Math.max(1.5, (v / max) * (h - 1)) : 0;
+      out += '<rect x="' + (off + i * bw + bw * .15).toFixed(2) + '" y="' + (h - bh).toFixed(2) + '" width="' + (bw * .7).toFixed(2) +
+        '" height="' + bh.toFixed(2) + '" fill="currentColor" opacity="' + (i === vals.length - 1 ? 1 : .4) + '"/>';
+    });
+    out += '<line x1="0" y1="' + h + '" x2="' + w + '" y2="' + h + '" stroke="var(--muted)" stroke-width="1" opacity=".5" vector-effect="non-scaling-stroke"/>';
+    return '<svg class="sk" ' + view + ' aria-hidden="true">' + out + "</svg>";
+  }
+
+  /* ================= Render: header and dial ================= */
+  function renderHeader(data){
+    var today = data.today;
+    $("pill").className = "pill" + (today >= N ? " done" : today ? " live" : "");
+    $("pillText").textContent = today >= N ? "Finished · day " + N + " of " + N : today ? "Sending · day " + today + " of " + N : "Day 0 of " + N;
+    $("statusText").textContent = data.status || (today ? (N - today) + " days left in the test." : "Not sending yet.");
+    if (state.sample){
+      $("asOf").innerHTML = "<b>Sample counts</b>, made up in this page. Not real.";
+    } else {
+      var ct = centralTime(data.asOf);
+      $("asOf").innerHTML = (ct ? "Counts as of <b>" + esc(ct) + "</b>" : "Counts time not given") +
+        (source === "live" ? '<span class="src live">Live</span>' : "");
+    }
+    var showList = !today && data.checklist.length > 0;
+    $("waiting").hidden = !showList;
+    $("checklist").innerHTML = data.checklist.map(function(c){
+      return "<li><span>" + esc(c.label) + '</span><span class="tag ' + (c.done ? "ready" : "wait") + '">' + (c.done ? "Done" : "Waiting") + "</span></li>";
+    }).join("");
+  }
+
+  function renderDial(data, an){
+    var today = data.today;
+    if (state.kind === "day"){
+      var a = cellA(state.day);
+      selPath.setAttribute("d", sector(R0 - 3, R1 + 3, a[0] - .5, a[1] + .5));
+      weekBand.setAttribute("d", "");
+    } else if (state.kind === "week"){
+      var r = weekRange(state.week);
+      selPath.setAttribute("d", "");
+      weekBand.setAttribute("d", sector(R0 - 3, 214, (r[0] - 1) * DEG + .2, r[1] * DEG - .2));
+    } else { selPath.setAttribute("d", ""); weekBand.setAttribute("d", ""); }
+    wkEls.forEach(function(x, i){
+      var on = state.kind === "week" && state.week === i + 1;
+      x.p.setAttribute("class", "wk" + (on ? " on" : ""));
+      x.l.setAttribute("class", "wklbl" + (on ? " on" : ""));
+    });
+    if (state.kind === "day"){
+      var od = data.days[state.day - 1], dl = dateOf(state.day);
+      $("cLabel").textContent = state.day === today ? "Today · day" : "Day";
+      $("cNum").textContent = state.day;
+      $("cOf").textContent = dl || "of " + N;
+      $("cSub").textContent = state.day <= today ? fmt(od.sent) + " sent" : "Not reached yet";
+    } else if (state.kind === "week"){
+      var r2 = weekRange(state.week);
+      $("cLabel").textContent = "Week";
+      $("cNum").textContent = state.week;
+      $("cOf").textContent = "days " + r2[0] + " to " + r2[1];
+      $("cSub").textContent = r2[0] <= today ? fmt(sum(r2[0], r2[1]).sent) + " sent" : "Not started";
+    } else {
+      $("cLabel").textContent = "Day";
+      $("cNum").textContent = today;
+      $("cOf").textContent = "of " + N;
+      $("cSub").textContent = today >= N ? "Test complete" : today ? (N - today) + " days left" : "Starts on the first send";
+    }
+    ["Day","Week","All"].forEach(function(k){ $("k" + k).setAttribute("aria-pressed", String(state.kind === k.toLowerCase())); });
+    $("kDay").textContent = "Day " + (state.kind === "day" ? state.day : Math.max(1, an));
+    $("kWeek").textContent = "Week " + (state.kind === "week" ? state.week : weekOf(an || 1));
+    $("prevBtn").disabled = state.kind === "all" || (state.kind === "day" ? state.day <= 1 : state.week <= 1);
+    $("nextBtn").disabled = state.kind === "all" || (state.kind === "day" ? state.day >= N : state.week >= WEEKS);
+    var rg = range(), note;
+    if (rg[0] > today){
+      note = today
+        ? (state.kind === "day" ? "Day " + state.day + " has not happened yet." : "Week " + state.week + " has not started yet.")
+        : "The clock starts on the first send. Nothing has been sent yet.";
+    } else note = state.kind === "all" ? "Tap a day or a week on the clock to scope every number." : "Showing " + lowerFirst(scopeLabel()) + ". Tap the center for all " + N + " days.";
+    $("scopeNote").textContent = note;
+    document.querySelectorAll("[data-scope]").forEach(function(e){ e.textContent = scopeLabel(); });
+  }
+
+  /* ================= Render: the weekly read ================= */
+  function audienceWords(data){
+    return joinAnd(data.inv.map(function(x){ return lowerFirst(x.name.split("·").pop().trim()); }));
+  }
+  function renderWeekly(data, an){
+    var today = data.today;
+    var wk = state.kind === "week" ? state.week : state.kind === "day" ? weekOf(an || 1) : (today ? Math.max(1, Math.floor(today / 7)) : 1);
+    var r = weekRange(wk), ws = sum(r[0], r[1]), ps = wk > 1 ? sum(weekRange(wk - 1)[0], weekRange(wk - 1)[1]) : null;
+    var started = today > 0 && r[0] <= today, inProg = started && today < r[1];
+    var F = function(v){ return '<span class="fig-in">' + fmt(v) + "</span>"; };
+
+    var tabs = "";
+    for (var w = 1; w <= WEEKS; w++){
+      tabs += '<button type="button" data-wtab="' + w + '" aria-pressed="' + (w === wk) + '" class="' + (today && weekRange(w)[0] <= today ? "has" : "") + '">W' + w + "</button>";
+    }
+    $("wTabs").innerHTML = tabs;
+    $("wTag").textContent = "Week " + wk + " · days " + r[0] + " to " + r[1];
+
+    var head, deck, body = "", next;
+    var open = data.checklist.filter(function(c){ return !c.done; }).map(function(c){ return lowerFirst(c.label); });
+    if (!today){
+      var appr = 0, hold = 0;
+      data.inv.forEach(function(x){ appr += x.approved; hold += x.onHold; });
+      head = "Nothing has gone out yet.";
+      deck = "The " + N + "-day clock has not started. " + (data.testStart ? "Day 1 is " + dateOf(1) + "." : "The first send starts it.");
+      body = '<p class="first">No emails have gone out, so there is nothing to read yet. ' +
+        (open.length ? (WORDS[open.length] || open.length) + " " + pl(open.length, "item is", "items are") + " still open before sending: " + esc(joinAnd(open)) + ". "
+                     : "Everything on the checklist is done. ") +
+        (data.inv.length ? "The lists are ready: " + F(appr) + " contacts are approved across " + esc(audienceWords(data)) + ", with " + F(hold) + " more on hold." : "") + "</p>" +
+        "<p>This week every number stands at zero: " + F(0) + " sent, " + F(0) + " delivered, " + F(0) + " opened, " + F(0) + " replies, " + F(0) +
+        " positive replies, " + F(0) + " calls booked, " + F(0) + " calls held and " + F(0) + " activations paid.</p>";
+      next = data.next["0"] ? esc(data.next["0"]) : open.length
+        ? "Once the " + esc(joinAnd(open)) + " " + pl(open.length, "is", "are") + " done, " + (data.testStart ? dateOf(1) : "the first send") + " becomes day 1 of " + N + "."
+        : (data.testStart ? dateOf(1) : "The first send") + " becomes day 1 of " + N + ".";
+    } else if (!started){
+      head = "Week " + wk + " has not started yet.";
+      deck = "It covers days " + r[0] + " to " + r[1] + ". Today is day " + today + ".";
+      next = data.next[wk] ? esc(data.next[wk]) : "Nothing planned for this week yet.";
+    } else {
+      var so = inProg ? " so far" : "";
+      head = "Week " + wk + so + ": " + fmt(ws.interested) + " positive " + pl(ws.interested, "reply", "replies") + " from " + fmt(ws.sent) + " " + pl(ws.sent, "email", "emails");
+      var dk = [];
+      if (ps && ps.sent){
+        var ch = Math.round((ws.sent - ps.sent) / ps.sent * 100);
+        dk.push(ch === 0 ? "Volume matches week " + (wk - 1) + "." : "Volume is " + (ch > 0 ? "up " : "down ") + Math.abs(ch) + "% on week " + (wk - 1) + so + ".");
+      } else if (wk === 1) dk.push("The first week of the " + N + "-day test.");
+      if (ps) dk.push(ws.interested === ps.interested ? "Positive replies held at " + fmt(ws.interested) + "." : "Positive replies went from " + fmt(ps.interested) + " to " + fmt(ws.interested) + ".");
+      if (inProg) dk.push("Days " + r[0] + " to " + today + " of " + r[1] + ". The full read lands at the end of day " + r[1] + ".");
+      deck = dk.join(" ");
+      var p1 = "The test sent " + F(ws.sent) + " " + pl(ws.sent, "email", "emails") + (inProg ? " so far this week" : " in week " + wk) + ": " +
+        F(ws.first) + " first " + pl(ws.first, "email", "emails") + " and " + F(ws.follow) + " " + pl(ws.follow, "follow-up", "follow-ups") + ". ";
+      p1 += data.bounceUntracked
+        ? F(ws.delivered) + " count as delivered, since bounces are not tracked yet."
+        : F(ws.delivered) + " " + pl(ws.delivered, "was", "were") + " delivered and " + F(ws.bounced) + " bounced.";
+      var p2 = ws.replies
+        ? F(ws.replies) + " " + pl(ws.replies, "person", "people") + " replied and " + F(ws.interested) + " " + pl(ws.interested, "was", "were") +
+          " interested, a positive reply rate of " + pct(ws.interested, ws.delivered) + " of delivered." +
+          (ws.stop ? " " + F(ws.stop) + " asked to stop and " + pl(ws.stop, "was", "were") + " removed for good." : "")
+        : "No one replied " + (inProg ? "yet this week" : "this week") + ", so there are " + F(0) + " replies and " + F(0) + " positive replies.";
+      var p3 = F(ws.booked) + " " + pl(ws.booked, "call was", "calls were") + " booked, " + F(ws.held) + " " + pl(ws.held, "call was", "calls were") +
+        " held and " + F(ws.paid) + " " + pl(ws.paid, "activation was", "activations were") + " paid.";
+      body = '<p class="first">' + p1 + "</p><p>" + p2 + "</p><p>" + p3 + "</p>";
+      next = data.next[wk] ? esc(data.next[wk])
+        : inProg ? "Week in progress. The note for next week is written at the end of day " + r[1] + "." : "No note written for this week.";
+    }
+    $("wHead").textContent = head;
+    $("wDeck").textContent = deck;
+    $("wBody").innerHTML = body;
+    $("wBody").hidden = !body;
+    $("wNext").innerHTML = next;
+
+    // The seven numbers
+    $("sevenNote").textContent = !today ? "Before week 1"
+      : "Week " + wk + (inProg ? " so far" : "") + (wk > 1 ? " against week " + (wk - 1) : ", the first week");
+    var lastWeek = today ? Math.min(wk, weekOf(today)) : 0;
+    var weekly = [];
+    for (var k = 1; k <= lastWeek; k++){ var kr = weekRange(k); weekly.push(sum(kr[0], kr[1])); }
+    var rows = [["Sent","sent"],["Delivered","delivered"],["Opened","opened"],["Clicked","clicked"],["Replies","replies"],["Positive replies","interested"],["Calls booked","booked"],["Calls held","held"],["Activations paid","paid"]];
+    state.lines = {wk:wk, r:r, before:!today, data:data};
+    $("sevenBody").innerHTML = rows.map(function(row){
+      var key = row[1], a = ws[key], b = ps ? ps[key] : null, chg;
+      if (!started || b === null) chg = '<span class="flat">n/a</span>';
+      else {
+        var dv = a - b;
+        chg = dv === 0 ? '<span class="flat">0</span>' : '<span class="' + (dv > 0 ? "up" : "down") + '">' + (dv > 0 ? "+" : "") + fmt(dv) + "</span>";
+      }
+      var lab = '<button type="button" class="lineLink" data-line="' + key + '" data-name="' + esc(row[0]) + '">' + esc(row[0]) + "</button>" + (key === "delivered" && data.bounceUntracked ? '<span class="lnote">Bounces not tracked yet</span>' : "");
+      return "<tr><td>" + lab + '</td><td class="tw' + (a ? "" : " flat") + '">' + fmt(a) + "</td><td" + (b ? "" : ' class="flat"') + ">" + (b === null ? "n/a" : fmt(b)) +
+        "</td><td>" + chg + '</td><td class="spk">' + spark(weekly.map(function(x){ return x[key]; })) + "</td></tr>";
+    }).join("");
+  }
+
+  /* ================= Render: the funnel ================= */
+  function renderFunnel(data, rg){
+    var s = sum(rg[0], rg[1]), ever = sum(1, N);
+    var approved = data.inv.reduce(function(t, x){ return t + x.approved; }, 0);
+    var before = rg[0] > 1 ? sum(1, rg[0] - 1).first : 0;
+    var any = s.first + s.replies + s.booked + s.held + s.paid > 0;
+    if (!data.today || ever.sent === 0){
+      $("fEmpty").textContent = "Nothing has been sent yet, so the funnel is empty. " + fmt(approved) + " approved " + pl(approved, "contact is", "contacts are") + " waiting.";
+      $("fEmpty").hidden = false; $("fWrap").hidden = true; return;
+    }
+    if (!any){
+      $("fEmpty").textContent = rg[0] > data.today ? "This part of the test has not happened yet." : "Nothing was sent or answered in this view.";
+      $("fEmpty").hidden = false; $("fWrap").hidden = true; return;
+    }
+    $("fEmpty").hidden = true; $("fWrap").hidden = false;
+    var pool = Math.max(0, approved - before), delivered = Math.max(0, s.first - s.bounced);
+    var st = [
+      ["Approved", pool, "s-pool", null],
+      ["Emailed", s.first, "s-send", ["emailed", "unsent"]],
+      ["Delivered", delivered, "s-send", ["delivered", "bounced"]],
+      ["Replied", s.replies, "s-reply", ["replied", "no reply"]],
+      ["Positive", s.interested, "s-reply", ["positive", "not positive"]],
+      ["Booked", s.booked, "s-book", ["booked", "not booked"]],
+      ["Calls held", s.held, "s-book", ["held", "not held"]],
+      ["Paid", s.paid, "s-paid", ["paid", "unpaid"]]
+    ];
+    var max = Math.max(1, pool, s.first);
+    $("fun").innerHTML = st.map(function(x, i){
+      var c = x[1], wpct = c > 0 ? Math.max(3, Math.sqrt(c / max) * 100) : 0, rate = "";
+      if (i > 0){
+        var prev = st[i - 1][1];
+        if (!prev && !c) rate = "<b>n/a</b><small>none</small>";
+        else if (c > prev) rate = "<b>over 100%</b><small>has earlier ones</small>";
+        else rate = "<b>" + pct(c, prev) + "</b><small>" + (prev - c ? MINUS + fmt(prev - c) + " " + x[3][1] : "none dropped") + "</small>";
+      }
+      return '<li><span class="f-name">' + x[0] + '</span><span class="f-num' + (c ? "" : " zero") + '">' + fmt(c) + "</span>" +
+        '<span class="f-track"><span class="f-bar ' + x[2] + '" style="width:' + wpct.toFixed(1) + '%"></span></span>' +
+        '<span class="f-rate' + (i ? "" : " first") + '">' + rate + "</span></li>";
+    }).join("");
+    $("fun").setAttribute("aria-label", st.map(function(x){ return x[0] + " " + x[1]; }).join(", "));
+    $("fNote").innerHTML = "Emails sent in this view: <b>" + fmt(s.sent) + "</b>, " + fmt(s.first) + " first and " + fmt(s.follow) + " " + pl(s.follow, "follow-up", "follow-ups") + ". " +
+      "Approved counts contacts not yet emailed when this view starts. Bar width follows the square root of the count, so small stages stay visible." +
+      (data.bounceUntracked ? " Bounces are not tracked yet, so delivered equals emailed." : "");
+  }
+
+  /* ================= Render: replies, inventory, tests ================= */
+  function renderReplies(data, rg){
+    var s = sum(rg[0], rg[1]);
+    $("rEmpty").hidden = s.replies > 0;
+    $("rEmpty").textContent = data.today ? "No replies in this view." : "No replies yet. They show here as they come in.";
+    [["sInt", s.interested],["sStop", s.stop],["sOoo", s.ooo],["sOth", s.other]].forEach(function(x){ $(x[0]).style.flexGrow = x[1]; });
+    setNum("rInt", s.interested); setNum("rStop", s.stop); setNum("rOoo", s.ooo); setNum("rOth", s.other);
+    if (data.bounceUntracked){
+      var hb = $("hB"); hb._v = null; hb.textContent = "Not tracked"; hb.classList.add("na"); hb.classList.remove("zero");
+      $("hBS").textContent = "the lead tracker does not record bounces yet";
+    } else {
+      setNum("hB", s.bounced);
+      $("hBS").textContent = s.sent ? pct(s.bounced, s.sent) + " of emails sent" : "of emails sent";
+    }
+    setNum("hS", s.stop); $("hSS").textContent = "never emailed again";
+    [["hO", "opened", data.opensUntracked, "opens"], ["hC", "clicked", data.clicksUntracked, "clicks"]].forEach(function(x){
+      if (x[2]){
+        var e = $(x[0]); e._v = null; e.textContent = "Not tracked"; e.classList.add("na"); e.classList.remove("zero");
+        $(x[0] + "S").textContent = "the lead tracker does not record " + x[3] + " yet";
+      } else {
+        setNum(x[0], s[x[1]]);
+        $(x[0] + "S").textContent = s.delivered ? pct(s[x[1]], s.delivered) + " of delivered" : "of delivered";
+      }
+    });
+  }
+
+  /* ================= Render: quota ================= */
+  function quotaSum(a, b){ var t = 0, q = D().quota; for (var d = Math.max(1, a); d <= Math.min(b, N); d++) t += q[d - 1]; return t; }
+  function quotaRow(label, sent, target, reached, sub){
+    var all = Math.max(1, target, sent), met = target > 0 && sent >= target;
+    var tag = !target ? "No send planned" : !reached ? "Not reached yet" : met ? "Met" : "Short by " + fmt(target - sent);
+    // ponytail: red only below 95% of target, so a handful short of a 500 day reads as close, not failed
+    return '<li class="' + (reached && target && sent < target * .95 ? "alert" : "") + '">' +
+      '<div class="inv-top"><span class="inv-name">' + esc(label) + '</span><span class="inv-nums"><b>' + fmt(sent) + "</b>of " + fmt(target) + " · " + tag + "</span></div>" +
+      '<div class="invbar" aria-hidden="true"><span class="ib-left" style="width:' + (Math.min(sent, all) / all * 100) + '%"></span></div>' +
+      (sub ? '<p class="fhint">' + sub + "</p>" : "") + "</li>";
+  }
+  function renderQuota(data, an){
+    var today = data.today, d = Math.max(1, an || 1), wk = weekOf(d), wr = weekRange(wk);
+    var dayS = sum(d, d), wkS = sum(wr[0], wr[1]), allS = sum(1, today), out = [];
+    $("qTag").textContent = today ? "Day " + d + " · week " + wk : "Before day 1";
+    if (data.pilot && (data.pilot.quota || data.pilot.first)){
+      out.push(quotaRow("Pilot, before day 1", data.pilot.first, data.pilot.quota, data.pilot.first > 0 || today > 0,
+        fmt(data.pilot.replies) + " " + pl(data.pilot.replies, "reply", "replies") + ", " + fmt(data.pilot.bounced) + " bounced. Not part of the " + N + " days."));
+    }
+    var dl = dateOf(d);
+    out.push(quotaRow((d === today ? "Today, day " : "Day ") + d + (dl ? " · " + dl : ""), dayS.first, data.quota[d - 1], d <= today));
+    out.push(quotaRow("Week " + wk + (wr[0] <= today && today < wr[1] ? " so far" : ""), wkS.first, wr[0] <= today ? quotaSum(wr[0], Math.min(wr[1], today)) : quotaSum(wr[0], wr[1]), wr[0] <= today,
+      "Full week target " + fmt(quotaSum(wr[0], wr[1])) + "."));
+    out.push(quotaRow("All " + N + " days" + (today ? " so far" : ""), allS.first, today ? quotaSum(1, today) : quotaSum(1, N), today > 0, "Full test target " + fmt(quotaSum(1, N)) + "."));
+    data.inv.forEach(function(x){
+      if (!data.share[x.key]) return;
+      var t = wr[0] <= today ? quotaSum(wr[0], Math.min(wr[1], today)) : quotaSum(wr[0], wr[1]);
+      out.push(quotaRow(x.name + ", week " + wk, wkS[x.key] || 0, Math.round(t * data.share[x.key]), wr[0] <= today));
+    });
+    $("qList").innerHTML = out.join("");
+    $("qNote").textContent = today ? "Red means under 95% of target. A target counts only the days that have happened." : "The targets fill in from day 1.";
+  }
+
+  function renderInventory(data, an){
+    var today = data.today, used = sum(1, an);
+    $("invTag").textContent = today ? (an === today ? "End of day " + today : "As of day " + an) : "Right now";
+    var totalLeft = 0, totalHeld = 0;
+    $("inv").innerHTML = data.inv.map(function(x){
+      var u = used[x.key] || 0, left = Math.max(0, x.approved - u), all = Math.max(1, x.approved + x.onHold);
+      totalLeft += left; totalHeld += x.onHold;
+      var pace = an >= 5 ? (sum(an - 6, an)[x.key] || 0) / 5 : 0;
+      var out = today > 0 && left <= 0;
+      var low = !out && pace > 0 && left / pace < 3;
+      return '<li class="' + (out ? "alert" : "") + '">' +
+        '<div class="inv-top"><span class="inv-name">' + esc(x.name) + '</span><span class="inv-nums"><b>' + fmt(left) + "</b>approved left · " + fmt(x.onHold) + " on hold</span></div>" +
+        '<div class="invbar" aria-hidden="true"><span class="ib-left" style="width:' + (left / all * 100) + '%"></span><span class="ib-used" style="width:' + (Math.min(u, x.approved) / all * 100) + '%"></span><span class="ib-held" style="width:' + (x.onHold / all * 100) + '%"></span></div>' +
+        (out ? '<p class="inv-alert" role="status">Ran out of approved contacts. Sending to this audience has stopped until more are approved.</p>' : "") +
+        (low ? '<p class="inv-alert low">Runs low: about ' + Math.max(1, Math.round(left / pace)) + " sending " + pl(Math.max(1, Math.round(left / pace)), "day", "days") + " left at this pace.</p>" : "") +
+        "</li>";
+    }).join("") || '<li>No audiences listed yet.</li>';
+    $("invTotal").innerHTML = "<span>Total approved left <b>" + fmt(totalLeft) + "</b></span><span>On hold <b>" + fmt(totalHeld) + "</b>: already emailed by another company Demetri runs, saved for a later date</span>";
+  }
+
+  function renderTests(data, rg){
+    var s = sum(rg[0], rg[1]), keys = data.angKeys;
+    var hasTests = !!data.angles && keys.some(function(g){ return s.ang[g].sent > 0; });
+    $("tEmpty").hidden = hasTests;
+    $("tEmpty").textContent = data.angles ? "No sends in this view." : "No tests running yet. Subject lines and angles show here after the first sends.";
+    $("tWrap").hidden = !hasTests;
+    if (!hasTests){ $("tBody").innerHTML = ""; return; }
+    var best = keys.reduce(function(b, g){ var x = s.ang[g], r = x.sent ? x.replies / x.sent : 0; return r > b.r ? {g:g, r:r} : b; }, {g:null, r:0}).g;
+    $("tBody").innerHTML = keys.map(function(g){
+      var x = s.ang[g], m = data.angles[g];
+      return '<tr><td><span class="ang">' + esc(g) + ". " + esc(m.name) + "</span>" + (m.subj ? '<span class="subj">' + esc(m.subj) + "</span>" : "") +
+        "</td><td>" + fmt(x.sent) + '</td><td class="' + (g === best ? "best" : "") + '">' + pct(x.replies, x.sent) + "</td><td>" + fmt(x.positive) + "</td><td>" + fmt(x.booked) + "</td></tr>";
+    }).join("");
+  }
+
+  /* The ledger is real in sample mode too: it is about people, not sends. */
+  var lgView = "asked";
+  var LG = {
+    asked: "Demetri owes",
+    owed: "Wilson and Gary owe",
+    calls: "Calls to make",
+    settled: "Settled in writing"
+  };
+  function shortDate(iso){
+    if (!/^\d{4}-\d{2}-\d{2}$/.test(iso || "")) return "";
+    return new Date(iso + "T12:00:00Z").toLocaleDateString("en-US", {timeZone:"UTC", month:"short", day:"numeric"});
+  }
+  function renderLedger(){
+    var L = REAL.ledger;
+    $("secLedger").hidden = !L;
+    if (!L) return;
+    $("lgTag").textContent = L.checked ? "Checked " + L.checked : "";
+    $("lgSum").innerHTML = Object.keys(LG).map(function(g){
+      var t = L[g] || {}, big, sub;
+      if (g === "settled"){ big = fmt(num(L.settled)); sub = "items"; }
+      else {
+        big = fmt(num(t.done)) + '<span class="zero"> / ' + fmt(num(t.total)) + "</span>";
+        sub = (g === "calls" ? "made" : "done") + (t.drafted ? " · " + fmt(num(t.drafted)) + " written, not sent" : "") +
+          (t.late ? ' · <span class="late">' + fmt(num(t.late)) + " late</span>" : "");
+      }
+      return '<button type="button" data-lg="' + g + '" aria-pressed="' + (g === lgView) + '"><span class="lbl">' + LG[g] + "</span><b>" + big + '</b><span class="sub">' + sub + "</span></button>";
+    }).join("");
+    var rank = function(i){ return i.late ? 0 : i.status === "open" ? 1 : i.status === "drafted" ? 2 : 3; };
+    var rows = L.items.filter(function(i){ return i && i.group === lgView; }).slice().sort(function(a, b){
+      if (lgView === "settled") return String(b.date || "").localeCompare(String(a.date || ""));
+      return rank(a) - rank(b) || String(a.due || "").localeCompare(String(b.due || ""));
+    });
+    $("lgList").innerHTML = rows.map(function(i){
+      var tag;
+      if (lgView === "settled") tag = '<span class="tag ready">' + esc(shortDate(i.date)) + "</span>";
+      else if (i.late) tag = '<span class="tag late">Late · was due ' + esc(shortDate(i.due)) + "</span>";
+      else if (i.status === "done") tag = '<span class="tag ready">Done</span>';
+      else if (i.status === "drafted") tag = '<span class="tag draft">Written, not sent</span>';
+      else tag = '<span class="tag wait">' + (i.due ? "Due " + esc(shortDate(i.due)) : "Open") + "</span>";
+      var lines = "";
+      if (lgView === "calls"){
+        lines += '<p class="lg-ans"><span>Recommended: </span>' + esc(i.rec) + "</p>";
+        lines += '<p class="lg-ans"><span>Demetri: </span>' + (i.position ? esc(i.position) : "no position yet") + "</p>";
+      } else {
+        if (i.answer) lines += '<p class="lg-ans"><span>' + (i.status === "done" ? "Answer: " : "Drafted: ") + "</span>" + esc(i.answer) + "</p>";
+        if (i.note) lines += '<p class="lg-ans"><span>Note: </span>' + esc(i.note) + "</p>";
+      }
+      var who = lgView === "settled" ? (i.by ? "By " + i.by : "") : lgView === "calls" ? "Wilson and Gary" : (i.owner ? i.owner + (i.from ? ", asked by " + i.from : "") : "");
+      var src = [who, i.source].filter(Boolean).join(" · ");
+      return '<li class="' + (i.late ? "is-late" : i.status === "done" ? "is-done" : "") + '"><div class="lg-top"><span class="lg-what">' + esc(i.what) + "</span>" + tag + "</div>" + lines +
+        (src ? '<p class="lg-src">' + esc(src) + "</p>" : "") + "</li>";
+    }).join("") || "<li>Nothing here.</li>";
+  }
+  $("lgSum").addEventListener("click", function(e){
+    var b = e.target.closest("[data-lg]");
+    if (b){ lgView = b.getAttribute("data-lg"); renderLedger(); }
+  });
+
+  function renderFooter(data){
+    $("gapsWrap").hidden = !data.gaps.length;
+    $("gaps").innerHTML = data.gaps.map(function(g){ return "<li>" + esc(g) + "</li>"; }).join("");
+  }
+
+  function render(){
+    var data = D(), an = anchor(), rg = range();
+    renderHeader(data);
+    renderDial(data, an);
+    renderQuota(data, an);
+    renderWeekly(data, an);
+    renderFunnel(data, rg);
+    renderReplies(data, rg);
+    renderInventory(data, an);
+    renderTests(data, rg);
+    renderFooter(data);
+    renderLedger();
+  }
+
+  /* ================= Interaction ================= */
+  function pickDay(d){ state.kind = "day"; state.day = Math.max(1, Math.min(N, d)); state.week = weekOf(state.day); render(); }
+  function pickWeek(w){ state.kind = "week"; state.week = Math.max(1, Math.min(WEEKS, w)); render(); }
+  function pickAll(){ state.kind = "all"; render(); }
+
+  svg.addEventListener("click", function(e){
+    var wkEl = e.target.closest("[data-week]");
+    if (wkEl) return pickWeek(+wkEl.getAttribute("data-week"));
+    var c = e.target.closest("[data-day]");
+    if (c) pickDay(+c.getAttribute("data-day"));
+  });
+  $("centerBtn").addEventListener("click", pickAll);
+  $("dial").addEventListener("keydown", function(e){
+    var an = anchor() || 1;
+    if (e.key === "ArrowRight"){ e.preventDefault(); pickDay(state.kind === "day" ? state.day + 1 : an); }
+    else if (e.key === "ArrowLeft"){ e.preventDefault(); pickDay(state.kind === "day" ? state.day - 1 : an); }
+    else if (e.key === "ArrowUp"){ e.preventDefault(); pickWeek(state.kind === "week" ? state.week + 1 : weekOf(an)); }
+    else if (e.key === "ArrowDown"){ e.preventDefault(); pickWeek(state.kind === "week" ? state.week - 1 : weekOf(an)); }
+    else if (e.key === "Escape" || e.key === "Home"){ e.preventDefault(); pickAll(); }
+  });
+  $("kDay").addEventListener("click", function(){ pickDay(state.kind === "day" ? state.day : Math.max(1, anchor())); });
+  $("kWeek").addEventListener("click", function(){ pickWeek(state.kind === "week" ? state.week : weekOf(anchor() || 1)); });
+  $("kAll").addEventListener("click", pickAll);
+  $("prevBtn").addEventListener("click", function(){ if (state.kind === "day") pickDay(state.day - 1); else pickWeek(state.week - 1); });
+  $("nextBtn").addEventListener("click", function(){ if (state.kind === "day") pickDay(state.day + 1); else pickWeek(state.week + 1); });
+  $("wTabs").addEventListener("click", function(e){ var b = e.target.closest("[data-wtab]"); if (b) pickWeek(+b.getAttribute("data-wtab")); });
+
+  function setSample(on){
+    if (on) SAMPLE = buildSample();
+    state.sample = on;
+    $("sampleToggle").checked = on;
+    $("banner").hidden = !on;
+    document.body.classList.toggle("is-sample", on);
+    state.kind = "all";
+    render();
+    sweep();
+  }
+  $("sampleToggle").addEventListener("change", function(e){ setSample(e.target.checked); });
+  $("bannerOff").addEventListener("click", function(){ setSample(false); });
+
+  /* First paint from the inline copy. */
+  drawCells(N + 1);
+  render();
+  if (location.hash === "#sample") setSample(true);
+  else if (REAL.today) sweep();
+
+  /* ================= Live counts from the artifact database (read only) ================= */
+  function applyLive(snap){
+    try {
+      if (!snap || !snap.exists) return;
+      var body = snap.data();
+      var doc = normalize(body && body.counts);
+      if (!doc) return;
+      var dayChanged = doc.today !== REAL.today;
+      REAL = doc; source = "live";
+      if (state.sample) return;
+      if (state.kind === "day" && state.day > N) state.day = N;
+      render();
+      if (dayChanged) sweep(); else drawCells(N + 1);
+    } catch (e){ /* keep what is on screen */ }
+  }
+  var unsubscribe = null;
+  function connect(){
+    var c = window.claude;
+    if (!c || typeof c.use !== "function") return;
+    var p;
+    try { p = c.use("db"); } catch (e){ return; }
+    if (!p || typeof p.then !== "function") return;
+    p.then(function(db){
+      if (!db || typeof db.doc !== "function") return;
+      var ref = db.doc("dashboard/current");
+      unsubscribe = ref.onSnapshot(applyLive, function(){
+        unsubscribe = null;
+        if (source === "live"){ source = "saved"; if (!state.sample) renderHeader(REAL); }
+      });
+    }, function(){ /* no db on this view */ });
+  }
+  /* ================= Line links: the emails behind each number ================= */
+  function isoDay(iso, start){
+    if (iso >= "2026-12-24" && iso < "2026-12-30") iso = "2026-12-23"; /* the clock holds through the pause */
+    var n = Math.round((Date.parse(iso) - Date.parse(start)) / 86400000);
+    return n + 1 - (iso >= "2026-12-30" && start < "2026-12-24" ? 6 : 0);
+  }
+  var LINE_DATES = {
+    sent: function(m){ return m.sent || []; },
+    delivered: function(m){ return m.bounced ? [] : (m.sent || []); },
+    opened: function(m){ return [m.opened]; }, clicked: function(m){ return [m.clicked]; },
+    replies: function(m){ return [m.reply]; },
+    interested: function(m){ return m.reply_type === "interested" ? [m.reply] : []; },
+    booked: function(m){ return [m.booked]; }, held: function(m){ return [m.held]; }, paid: function(m){ return [m.paid]; }
+  };
+  function openLine(key, name){
+    var L = state.lines, d = L.data, start = d.testStart;
+    var hit = function(iso){
+      if (!iso) return false;
+      if (L.before || !start) return !start || iso < start; /* before week 1: the pilot */
+      var n = isoDay(iso, start); return n >= L.r[0] && n <= L.r[1];
+    };
+    var list = d.messages.filter(function(m){ return LINE_DATES[key](m).some(hit); });
+    $("lineDlgH").textContent = name + ", " + (L.before ? "before week 1" : "week " + L.wk) + ": " + list.length;
+    var why = (key === "opened" || key === "clicked")
+      ? "Opens and clicks are not tracked: there is no tracking pixel, and first emails carry no links."
+      : "Nothing on this line " + (L.before ? "before week 1" : "in week " + L.wk) + " yet. Every email sent shows here, exactly as it went out.";
+    $("lineDlgBody").innerHTML = list.length ? list.map(function(m){
+      var dates = LINE_DATES[key](m).filter(hit).join(", ");
+      return "<details><summary>" + esc(m.who) + "<span>" + esc([m.state, dates, m.reply_type].filter(Boolean).join(" · ")) + "</span></summary>" +
+        ((m.mail || []).map(function(x){
+          return '<div class="mhead">' + esc((x.kind === "follow" ? "Follow-up" : "First email") + " · " + x.at + (x.subject ? " · Subject: " + x.subject : "")) + "</div><pre>" + esc(x.body) + "</pre>";
+        }).join("") || '<p class="empty">The email text was not logged for this one.</p>') + "</details>";
+    }).join("") : '<p class="empty">' + esc(why) + "</p>";
+    var dlg = $("lineDlg");
+    if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+  }
+  $("sevenBody").addEventListener("click", function(e){ var b = e.target.closest(".lineLink"); if (b) openLine(b.getAttribute("data-line"), b.getAttribute("data-name")); });
+  $("lineDlgX").addEventListener("click", function(){ $("lineDlg").close(); });
+  $("lineDlg").addEventListener("click", function(e){ if (e.target === this) this.close(); });
+  try { connect(); } catch (e){ /* page works without the db */ }
+})();
+</script>
+<script>
+// Comment buttons: open the claude.ai comment composer on a section. The shell shows and stores every thread.
+(async () => {
+  const comments = await claude.use("comments");
+  if (!comments) return;  // this view cannot comment: no buttons
+  const add = (target, where, label) => {
+    const b = document.createElement("button");
+    b.type = "button"; b.className = "cmt-btn"; b.textContent = "Comment";
+    b.setAttribute("aria-label", "Comment on " + label);
+    b.addEventListener("click", async () => {
+      try { await comments.openComposer({ element: target }); }
+      catch (e) { if (e && (e.code === "unavailable" || e.code === "not_granted")) document.querySelectorAll(".cmt-btn,.cmt-hint").forEach((n) => n.remove()); }
+    });
+    where(b);
+  };
+  document.querySelectorAll(".sec-h").forEach((hd) => {
+    const sec = hd.closest("article,section") || hd.parentElement;
+    const meta = hd.querySelector(".sec-meta") || hd;
+    add(sec, (b) => meta.appendChild(b), hd.querySelector("h2")?.textContent || "this section");
+  });
+  const clock = document.querySelector(".clockcol");
+  if (clock) add(clock, (b) => clock.insertBefore(b, clock.querySelector(".scopebar")), "the 90-day clock");
+  const col = document.querySelector(".datacol");
+  if (col) {
+    const hint = document.createElement("p");
+    hint.className = "cmt-hint";
+    hint.textContent = "Wilson, Gary: press Comment on any section, or turn on comment mode at the top to pin a note anywhere. Demetri sees every note.";
+    col.prepend(hint);
+  }
+})();
+</script>
+</body>
+</html>

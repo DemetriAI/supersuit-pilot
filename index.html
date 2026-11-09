@@ -1,80 +1,154 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta http-equiv="refresh" content="300">
 <meta name="robots" content="noindex">
 <title>Supersuit Outreach</title>
-<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Instrument+Serif:ital@1&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#f6f5f1;--card:#fff;--ink:#16161a;--mute:#6b6a72;--line:#e6e4dd;--acc:#1f5eff;--ok:#12805c;--no:#c2410c;--soft:#eef2ff}
-@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#0f0f12;--card:#18181d;--ink:#f2f2f4;--mute:#9a99a3;--line:#2a2a31;--acc:#7ea2ff;--ok:#3ccf95;--no:#ff8a50;--soft:#1c2140}}
-:root[data-theme=dark]{--bg:#0f0f12;--card:#18181d;--ink:#f2f2f4;--mute:#9a99a3;--line:#2a2a31;--acc:#7ea2ff;--ok:#3ccf95;--no:#ff8a50;--soft:#1c2140}
-*{box-sizing:border-box;margin:0}body{background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif;padding:0 16px 64px}
-main{max-width:880px;margin:0 auto}header{padding:28px 0 8px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;align-items:baseline}
-.brand{font-weight:800;letter-spacing:-.02em;font-size:18px}.asof{color:var(--mute);font-size:13px}
-h1{font-size:clamp(28px,6vw,44px);line-height:1.08;letter-spacing:-.03em;font-weight:800;margin:20px 0 10px}
-h2{font-size:13px;text-transform:uppercase;letter-spacing:.08em;color:var(--mute);margin:40px 0 12px;font-weight:600}
-.lede{color:var(--mute);max-width:60ch}.card{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:20px}
-.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px;margin-top:22px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px 16px}.stat b{display:block;font-size:30px;font-weight:800;letter-spacing:-.02em}
-.stat span{color:var(--mute);font-size:13px}.stat.goal{background:var(--soft);border-color:transparent}
-.gates{list-style:none;padding:0;display:grid;gap:8px}.gates li{display:flex;gap:12px;align-items:flex-start;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.gates small,.term small{display:block;color:var(--mute);font-size:13px}.dot{width:10px;height:10px;border-radius:50%;margin-top:6px;flex:none}
-.ok .dot{background:var(--ok)}.no .dot{background:var(--no)}
-.pace{display:grid;grid-template-columns:1fr 1fr;gap:10px}@media(max-width:560px){.pace{grid-template-columns:1fr}}
-.pace .card b{font-size:34px;font-weight:800;letter-spacing:-.02em;display:block}.pace .card p{color:var(--mute);font-size:14px;margin-top:4px}
-.tag{display:inline-block;font-size:12px;font-weight:600;border-radius:99px;padding:2px 10px;background:var(--soft);color:var(--acc);margin-bottom:8px}
-.scroll{overflow-x:auto}table{width:100%;border-collapse:collapse;background:var(--card);border:1px solid var(--line);border-radius:14px;overflow:hidden;font-variant-numeric:tabular-nums}
-th,td{padding:10px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}th{text-align:left;font-weight:500;white-space:normal}@media(max-width:560px){th,td{padding:9px 8px;font-size:14px}td span{display:block;margin:0}}
+:root{--bg:#f3e6df;--b1:#ff8a6b;--b2:#ffc7a8;--b3:#e9a3b4;--glass:rgba(255,255,255,.52);--glass2:rgba(255,255,255,.72);--edge:rgba(255,255,255,.75);
+--ink:#2b1815;--mute:#86665e;--line:rgba(120,70,60,.14);--ok:#0f8a5f;--okbg:rgba(15,138,95,.13);--no:#c4381f;--nobg:rgba(196,56,31,.12);
+--hot1:#ff7a55;--hot2:#e8483b;--hot3:#bf2f2c;--shadow:0 10px 40px rgba(120,50,35,.14)}
+@media (prefers-color-scheme:dark){:root:not([data-theme=light]){--bg:#1b1110;--b1:#8a2a1e;--b2:#5a2418;--b3:#4a1d2c;--glass:rgba(48,30,27,.55);--glass2:rgba(62,40,36,.7);--edge:rgba(255,255,255,.09);
+--ink:#f8ece7;--mute:#c09e95;--line:rgba(255,255,255,.08);--ok:#3fd29a;--okbg:rgba(63,210,154,.14);--no:#ff8466;--nobg:rgba(255,132,102,.14);--shadow:0 10px 40px rgba(0,0,0,.4)}}
+:root[data-theme=dark]{--bg:#1b1110;--b1:#8a2a1e;--b2:#5a2418;--b3:#4a1d2c;--glass:rgba(48,30,27,.55);--glass2:rgba(62,40,36,.7);--edge:rgba(255,255,255,.09);
+--ink:#f8ece7;--mute:#c09e95;--line:rgba(255,255,255,.08);--ok:#3fd29a;--okbg:rgba(63,210,154,.14);--no:#ff8466;--nobg:rgba(255,132,102,.14);--shadow:0 10px 40px rgba(0,0,0,.4)}
+*{box-sizing:border-box;margin:0}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--ink);font:15px/1.5 Inter,system-ui,sans-serif;padding:0 16px 72px;min-height:100vh;position:relative;overflow-x:hidden;font-variant-numeric:tabular-nums}
+body::before{content:"";position:fixed;inset:-20vmax;z-index:-1;pointer-events:none;
+background:radial-gradient(40vmax 34vmax at 12% 8%,var(--b1),transparent 60%),radial-gradient(38vmax 30vmax at 92% 18%,var(--b2),transparent 62%),radial-gradient(44vmax 36vmax at 60% 98%,var(--b3),transparent 60%);filter:blur(30px);opacity:.85}
+main{max-width:1080px;margin:0 auto}
+.glass{background:var(--glass);border:1px solid var(--edge);border-radius:22px;box-shadow:var(--shadow);-webkit-backdrop-filter:blur(22px) saturate(1.4);backdrop-filter:blur(22px) saturate(1.4)}
+header{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;padding:22px 0 18px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:-.02em;font-size:17px}
+.logo{width:30px;height:30px;border-radius:10px;background:linear-gradient(135deg,var(--hot1),var(--hot3));display:grid;place-items:center;color:#fff;font-size:15px;box-shadow:0 4px 14px rgba(232,72,59,.35)}
+.asof{display:flex;align-items:center;gap:8px;font-size:13px;color:var(--mute);padding:7px 12px;border-radius:99px}
+.live{width:8px;height:8px;border-radius:50%;background:var(--ok);box-shadow:0 0 0 0 var(--ok);animation:pulse 2s infinite}
+@keyframes pulse{0%{box-shadow:0 0 0 0 rgba(15,138,95,.5)}70%{box-shadow:0 0 0 9px rgba(15,138,95,0)}100%{box-shadow:0 0 0 0 rgba(15,138,95,0)}}
+.top{display:grid;grid-template-columns:1.7fr 1fr;gap:14px}
+.hero{position:relative;overflow:hidden;border-radius:24px;padding:24px 26px;color:#fff;background:linear-gradient(135deg,var(--hot1),var(--hot2) 55%,var(--hot3));box-shadow:0 18px 50px rgba(200,55,40,.32);display:grid;grid-template-columns:1fr auto;gap:18px;align-items:center}
+.hero::after{content:"";position:absolute;inset:0;background:radial-gradient(60% 80% at 85% 10%,rgba(255,255,255,.28),transparent 60%);pointer-events:none}
+.eyebrow{display:inline-flex;align-items:center;gap:7px;font-size:12px;font-weight:600;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.3);padding:4px 11px;border-radius:99px}
+.eyebrow i{width:6px;height:6px;border-radius:50%;background:#fff}
+.hero h1{font-size:clamp(24px,4.2vw,36px);line-height:1.1;letter-spacing:-.03em;font-weight:700;margin:14px 0 8px;max-width:22ch}
+.hero h1 em{font-family:"Instrument Serif",Georgia,serif;font-weight:400;font-size:1.12em}
+.hero p{opacity:.9;font-size:14px;max-width:46ch}
+.minis{display:flex;gap:22px;margin-top:18px;flex-wrap:wrap}.minis b{display:block;font-size:24px;font-weight:700;letter-spacing:-.02em}.minis span{font-size:12px;opacity:.85}
+.ring{position:relative;width:132px;height:132px;z-index:1}.ring svg{transform:rotate(-90deg)}
+.ring .track{stroke:rgba(255,255,255,.25)}.ring .val{stroke:#fff;stroke-linecap:round;transition:stroke-dashoffset 1.4s cubic-bezier(.2,.8,.2,1)}
+.ring div{position:absolute;inset:0;display:grid;place-items:center;text-align:center}.ring b{font-size:28px;font-weight:700;line-height:1}.ring small{display:block;font-size:11px;opacity:.85;margin-top:3px}
+.today{padding:20px 20px 16px}
+.date{display:flex;align-items:center;gap:12px;margin-bottom:14px}.date b{font-size:40px;font-weight:700;letter-spacing:-.04em;line-height:1;color:var(--hot2)}
+.date div{line-height:1.25}.date strong{display:block;font-weight:600}.date span{font-size:13px;color:var(--mute)}
+.row{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:14px;background:var(--glass2);border:1px solid var(--edge);margin-top:8px}
+.row b{flex:1;font-weight:600}.row span{font-size:13px;color:var(--mute)}.row em{font-style:normal;font-weight:700}
+.dot{width:9px;height:9px;border-radius:50%;flex:none}.ok .dot,.dot.ok{background:var(--ok)}.no .dot,.dot.no{background:var(--no)}
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:12px;margin-top:14px}
+.stat{padding:16px 16px 14px;transition:transform .25s ease}.stat:hover{transform:translateY(-4px)}
+.stat .ic{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--glass2);border:1px solid var(--edge);color:var(--hot2)}
+.stat .hd{display:flex;justify-content:space-between;align-items:flex-start}
+.chip{font-size:11px;font-weight:700;padding:3px 8px;border-radius:99px;background:var(--okbg);color:var(--ok)}.chip.no{background:var(--nobg);color:var(--no)}
+.stat b{display:block;font-size:30px;font-weight:700;letter-spacing:-.03em;margin-top:12px;line-height:1.1}.stat span{font-size:13px;color:var(--mute)}
+.stat.hot{background:linear-gradient(135deg,var(--hot1),var(--hot3));color:#fff;border-color:rgba(255,255,255,.3)}.stat.hot span{color:rgba(255,255,255,.85)}.stat.hot .ic{background:rgba(255,255,255,.2);color:#fff;border-color:rgba(255,255,255,.3)}
+h2{font-size:13px;text-transform:uppercase;letter-spacing:.09em;color:var(--mute);margin:36px 0 12px;font-weight:600;display:flex;align-items:center;gap:10px}
+h2 .chip{text-transform:none;letter-spacing:0}
+.inboxes{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
+.inbox{padding:18px}.ihead{display:flex;justify-content:space-between;align-items:center}.ihead b{font-size:17px}
+.pill{font-size:12px;font-weight:600;padding:3px 10px;border-radius:99px;display:inline-flex;align-items:center;gap:6px}.pill.ok{background:var(--okbg);color:var(--ok)}.pill.no{background:var(--nobg);color:var(--no)}
+.addr{display:block;color:var(--mute);font-size:13px;word-break:break-all;margin-top:2px}
+.big{margin:16px 0 8px;display:flex;align-items:baseline;gap:6px}.big b{font-size:34px;font-weight:700;letter-spacing:-.03em}.big span{color:var(--mute);font-size:14px}
+.bar{height:8px;border-radius:99px;background:var(--line);overflow:hidden}.bar i{display:block;height:100%;border-radius:99px;background:linear-gradient(90deg,var(--hot1),var(--hot2));width:0;transition:width 1.4s cubic-bezier(.2,.8,.2,1)}
+.inbox small{display:block;color:var(--mute);font-size:13px;margin-top:10px}
+.gates{list-style:none;padding:0;display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.gates li{display:flex;gap:12px;align-items:flex-start;padding:13px 15px;border-radius:16px}.gates .dot{margin-top:6px}
+.gates small{display:block;color:var(--mute);font-size:13px}
+.pace{display:grid;grid-template-columns:1fr 1fr;gap:12px}.pace .glass{padding:20px}
+.pace b{font-size:34px;font-weight:700;letter-spacing:-.03em;display:block}.pace p{color:var(--mute);font-size:14px;margin-top:4px}
+.tag{display:inline-block;font-size:12px;font-weight:600;border-radius:99px;padding:3px 10px;background:var(--glass2);border:1px solid var(--edge);color:var(--hot2);margin-bottom:10px}
+.scroll{overflow-x:auto;border-radius:20px}
+table{width:100%;border-collapse:separate;border-spacing:0}.glass.t{padding:4px 6px}
+th,td{padding:11px 12px;border-bottom:1px solid var(--line);text-align:right;white-space:nowrap}th{text-align:left;font-weight:500;white-space:normal}
 thead th{font-size:12px;color:var(--mute);text-transform:uppercase;letter-spacing:.06em;text-align:right}thead th:first-child{text-align:left}
 td span{color:var(--mute);font-size:13px;margin-left:4px}td.z{color:var(--mute)}tr:last-child th,tr:last-child td{border-bottom:0}
 th i{font-style:normal;color:var(--mute);display:inline-block;width:24px}
-.inboxes{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:10px}.inbox{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-.inbox b{display:block}.inbox span{color:var(--mute);font-size:13px;word-break:break-all}
-.mail{background:var(--card);border:1px solid var(--line);border-radius:16px;overflow:hidden}.mail .subj{padding:14px 18px;border-bottom:1px solid var(--line);font-weight:600}
-.mail .subj span{color:var(--mute);font-weight:400;margin-right:6px}.mail .body{padding:18px;display:grid;gap:12px}.mail .foot{color:var(--mute);font-size:13px;padding:0 18px 18px}
-dl{display:grid;gap:8px}.term{display:grid;grid-template-columns:140px 1fr;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px 14px}
-@media(max-width:560px){.term{grid-template-columns:1fr;gap:2px}}dt{font-weight:600}
+.mail{overflow:hidden}.mail .subj{padding:15px 20px;border-bottom:1px solid var(--line);font-weight:600}.mail .subj span{color:var(--mute);font-weight:400;margin-right:6px}
+.mail .body{padding:18px 20px;display:grid;gap:12px}.mail .foot{color:var(--mute);font-size:13px;padding:14px 20px 18px;border-top:1px solid var(--line)}
+dl{display:grid;grid-template-columns:1fr 1fr;gap:10px}.term{padding:13px 15px;border-radius:16px}dt{font-weight:600}dd{margin:2px 0 0}.term small{display:block;color:var(--mute);font-size:13px}
 ul.short{list-style:none;padding:0;display:flex;gap:16px;flex-wrap:wrap;margin-top:10px;color:var(--mute)}ul.short b{color:var(--ink)}
-.note{color:var(--mute);font-size:14px;margin-top:10px;max-width:70ch}
+.note{color:var(--mute);font-size:14px;margin-top:10px;max-width:75ch}
+@media(max-width:900px){.stats{grid-template-columns:repeat(3,1fr)}.inboxes{grid-template-columns:1fr}}
+@media(max-width:760px){.top,.pace,.gates,dl{grid-template-columns:1fr}.hero{grid-template-columns:1fr;padding:22px 20px}.ring{justify-self:start;width:112px;height:112px}.ring svg{width:112px;height:112px}
+.stats{grid-template-columns:1fr 1fr}.stat.hot{grid-column:1/-1}th,td{padding:9px 8px;font-size:14px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
 </style></head><body><main>
-<header><div class="brand">Supersuit outreach</div><div class="asof">Updated Sun Nov 8, 7:34 PM CT</div></header>
-<h1>Nothing sends until every check below is green. 4 of 7 are.</h1>
-<p class="lede">Three inboxes, one per state, sending the terms agreed with Wilson and Gary. Goal: 2 demos booked by Friday, November 13.</p>
+<header><div class="brand"><span class="logo">S</span>Supersuit outreach</div><div class="asof glass"><span class="live"></span>Updated Mon Nov 9, 12:27 AM CT</div></header>
+
+<section class="top">
+<div class="hero">
+<div><span class="eyebrow"><i></i>Week 1 starts Monday 8 AM CT</span>
+<h1>Nothing sends until every check below is green. 5 of 7 are.</h1>
+<p>Three inboxes, one per state, sending the terms agreed with Wilson and Gary. Goal: 2 demos booked by Friday, November 13.</p>
+<div class="minis"><div><b data-n="0">0</b><span>sent</span></div><div><b data-n="0">0</b><span>interested</span></div><div><b>0 / 2</b><span>demos booked</span></div></div></div>
+<div class="ring"><svg width="132" height="132" viewBox="0 0 132 132"><circle class="track" cx="66" cy="66" r="56" fill="none" stroke-width="11"/><circle class="val" cx="66" cy="66" r="56" fill="none" stroke-width="11" stroke-dasharray="351.9" stroke-dashoffset="351.9" data-off="102.1"/></svg><div><span><b data-n="71">71</b><b>%</b><small>checks green</small></span></div></div>
+</div>
+<div class="glass today"><div class="date"><b>09</b><div><strong>Monday</strong><span>420 planned across three inboxes</span></div></div><div class='row ok'><span class='dot'></span><b>Texas</b><span><em>0</em> / 140</span></div><div class='row ok'><span class='dot'></span><b>Florida</b><span><em>0</em> / 140</span></div><div class='row ok'><span class='dot'></span><b>Illinois</b><span><em>0</em> / 140</span></div></div>
+</section>
+
 <div class="stats">
-<div class="stat"><b>0</b><span>emails sent</span></div>
-<div class="stat"><b>0</b><span>interested replies</span></div>
-<div class="stat goal"><b>0 / 2</b><span>demos booked by Friday, November 13</span></div>
-<div class="stat"><b>0</b><span>bounced</span></div>
-<div class="stat"><b>0</b><span>asked to stop</span></div>
+<div class="glass stat"><div class="hd"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg></span><span class="chip">0% of plan</span></div><b data-n="0">0</b><span>emails sent</span></div>
+<div class="glass stat"><div class="hd"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span></div><b data-n="0">0</b><span>interested replies</span></div>
+<div class="glass stat hot"><div class="hd"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg></span></div><b>0 / 2</b><span>demos booked by Friday, November 13</span></div>
+<div class="glass stat"><div class="hd"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 14 4 9l5-5"/><path d="M4 9h11a5 5 0 0 1 0 10h-3"/></svg></span></div><b data-n="0">0</b><span>bounced</span></div>
+<div class="glass stat"><div class="hd"><span class="ic"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="m15 9-6 6M9 9l6 6"/></svg></span></div><b data-n="0">0</b><span>asked to stop</span></div>
 </div>
 
-<h2>Before the first email (4 of 7 green)</h2>
-<ul class="gates"><li class='ok'><span class='dot'></span><div><b>Agreement signed</b><small>Signed Nov 4</small></div></li><li class='no'><span class='dot'></span><div><b>Wilson and Gary approve the email and the list</b><small>Waiting. Sent for approval tonight.</small></div></li><li class='no'><span class='dot'></span><div><b>Do-not-contact list received</b><small>Waiting on Wilson and Gary.</small></div></li><li class='ok'><span class='dot'></span><div><b>Texas inbox warmed up</b><small>26 warm-up emails in the last 6 hours, 0 in spam</small></div></li><li class='ok'><span class='dot'></span><div><b>Florida inbox warmed up</b><small>27 warm-up emails in the last 6 hours, 0 in spam</small></div></li><li class='no'><span class='dot'></span><div><b>Illinois inbox warmed up</b><small>28 warm-up emails in the last 6 hours, 1 in spam</small></div></li><li class='ok'><span class='dot'></span><div><b>No provider warning</b><small>Clear</small></div></li></ul>
+<h2>The three inboxes</h2>
+<div class="inboxes"><div class='glass inbox'><div class='ihead'><b>Texas</b><span class='pill ok'><span class='dot'></span>Ready</span></div><span class='addr'>supersuittexas@gmail.com</span><div class='big'><b data-n='0'>0</b><span>/ 140 today</span></div><div class='bar'><i data-w='0'></i></div><small>0 sent this week. Warm-up: 13 emails in the last 6 hours, 0 in spam.</small></div><div class='glass inbox'><div class='ihead'><b>Florida</b><span class='pill ok'><span class='dot'></span>Ready</span></div><span class='addr'>supersuitflorida@gmail.com</span><div class='big'><b data-n='0'>0</b><span>/ 140 today</span></div><div class='bar'><i data-w='0'></i></div><small>0 sent this week. Warm-up: 16 emails in the last 6 hours, 0 in spam.</small></div><div class='glass inbox'><div class='ihead'><b>Illinois</b><span class='pill ok'><span class='dot'></span>Ready</span></div><span class='addr'>supersuitillinois@gmail.com</span><div class='big'><b data-n='0'>0</b><span>/ 140 today</span></div><div class='bar'><i data-w='0'></i></div><small>0 sent this week. Warm-up: 18 emails in the last 6 hours, 0 in spam.</small></div></div>
+
+<h2>Before the first email <span class="chip no">5 of 7 green</span></h2>
+<ul class="gates"><li class='glass ok'><span class='dot'></span><div><b>Agreement signed</b><small>Signed Nov 4</small></div></li><li class='glass no'><span class='dot'></span><div><b>Wilson and Gary approve the email and the list</b><small>Waiting on their written OK of the email and the list.</small></div></li><li class='glass no'><span class='dot'></span><div><b>Do-not-contact list received</b><small>Waiting on Wilson and Gary.</small></div></li><li class='glass ok'><span class='dot'></span><div><b>Texas inbox warmed up</b><small>13 warm-up emails in the last 6 hours, 0 in spam</small></div></li><li class='glass ok'><span class='dot'></span><div><b>Florida inbox warmed up</b><small>16 warm-up emails in the last 6 hours, 0 in spam</small></div></li><li class='glass ok'><span class='dot'></span><div><b>Illinois inbox warmed up</b><small>18 warm-up emails in the last 6 hours, 0 in spam</small></div></li><li class='glass ok'><span class='dot'></span><div><b>No provider warning</b><small>Clear</small></div></li></ul>
+
+<h2>Week 1, day by day (sent / planned)</h2>
+<div class="glass t scroll"><table><thead><tr><th>Day</th><th>Texas</th><th>Florida</th><th>Illinois</th></tr></thead><tbody><tr><th>Mon 9</th><td><b>0</b><span>/ 140</span></td><td><b>0</b><span>/ 140</span></td><td><b>0</b><span>/ 140</span></td></tr><tr><th>Tue 10</th><td><b>0</b><span>/ 140</span></td><td><b>0</b><span>/ 140</span></td><td><b>0</b><span>/ 92</span></td></tr><tr><th>Wed 11</th><td><b>0</b><span>/ 140</span></td><td><b>0</b><span>/ 74</span></td><td><b>0</b><span>/ 0</span></td></tr><tr><th>Thu 12</th><td><b>0</b><span>/ 140</span></td><td><b>0</b><span>/ 0</span></td><td><b>0</b><span>/ 0</span></td></tr><tr><th>Fri 13</th><td><b>0</b><span>/ 133</span></td><td><b>0</b><span>/ 0</span></td><td><b>0</b><span>/ 0</span></td></tr><tr><th>Sat 14</th><td><b>0</b><span>/ 0</span></td><td><b>0</b><span>/ 0</span></td><td><b>0</b><span>/ 0</span></td></tr></tbody></table></div>
 
 <h2>Pace</h2>
 <div class="pace">
-<div class="card"><span class="tag">Week 1, Nov 9 to 14</span><b>140 a day</b><p>Per inbox, Monday to Saturday, every one a new lead. 840 per inbox, 2,520 across three. No follow-ups this week.</p></div>
-<div class="card"><span class="tag">From Monday, November 16</span><b>264 a day</b><p>Per inbox on weekdays, 144 on Saturday: 1,464 a week per inbox, 4,392 across three, follow-ups included. Only if week 1 has no provider warning. This is above the 140 a day on the signed call and needs Wilson and Gary's OK.</p></div>
+<div class="glass"><span class="tag">Week 1, Nov 9 to 14</span><b>140 a day</b><p>Per inbox, Monday to Saturday, every one a new lead. 840 per inbox, 2,520 across three. No follow-ups this week.</p></div>
+<div class="glass"><span class="tag">From Monday, November 16</span><b>264 a day</b><p>Per inbox on weekdays, 144 on Saturday: 1,464 a week per inbox, 4,392 across three, follow-ups included. Only if week 1 has no provider warning. This is above the 140 a day on the signed call and needs Wilson and Gary's OK.</p></div>
 </div>
-<div class="inboxes" style="margin-top:10px"><div class='inbox'><b>Texas</b><span>supersuittexas@gmail.com</span></div><div class='inbox'><b>Florida</b><span>supersuitflorida@gmail.com</span></div><div class='inbox'><b>Illinois</b><span>supersuitillinois@gmail.com</span></div></div>
-
-<h2>Week 1, day by day (sent / planned)</h2>
-<div class="scroll"><table><thead><tr><th>Day</th><th>Texas</th><th>Florida</th><th>Illinois</th></tr></thead><tbody><tr><th>Mon 9</th><td><b>0</b><span>/ 140</span></td><td><b>0</b><span>/ 140</span></td><td><b>0</b><span>/ 140</span></td></tr><tr><th>Tue 10</th><td><b>0</b><span>/ 140</span></td><td><b>0</b><span>/ 140</span></td><td><b>0</b><span>/ 92</span></td></tr><tr><th>Wed 11</th><td><b>0</b><span>/ 140</span></td><td><b>0</b><span>/ 74</span></td><td><b>0</b><span>/ 0</span></td></tr><tr><th>Thu 12</th><td><b>0</b><span>/ 140</span></td><td><b>0</b><span>/ 0</span></td><td><b>0</b><span>/ 0</span></td></tr><tr><th>Fri 13</th><td><b>0</b><span>/ 133</span></td><td><b>0</b><span>/ 0</span></td><td><b>0</b><span>/ 0</span></td></tr><tr><th>Sat 14</th><td><b>0</b><span>/ 0</span></td><td><b>0</b><span>/ 0</span></td><td><b>0</b><span>/ 0</span></td></tr></tbody></table></div>
 
 <h2>Who gets it: the 10 audiences, week 1</h2>
-<div class="scroll"><table><thead><tr><th>Audience</th><th>TX</th><th>FL</th><th>IL</th></tr></thead><tbody><tr><th><i>1</i>Family holding companies</th><td class=''>17</td><td class=''>18</td><td class=''>12</td></tr><tr><th><i>2</i>Permanent-capital and long-hold firms</th><td class=''>3</td><td class=''>2</td><td class=''>4</td></tr><tr><th><i>3</i>Family offices</th><td class=''>10</td><td class=''>8</td><td class=''>6</td></tr><tr><th><i>4</i>Small concentrated investment funds</th><td class=''>18</td><td class=''>5</td><td class=''>3</td></tr><tr><th><i>5</i>PE and hedge fund principals at small firms</th><td class=''>46</td><td class=''>3</td><td class=''>10</td></tr><tr><th><i>6</i>Mineral and royalty owners and buyers</th><td class='z'>0</td><td class='z'>0</td><td class='z'>0</td></tr><tr><th><i>7</i>Land investors and developers</th><td class='z'>0</td><td class='z'>0</td><td class='z'>0</td></tr><tr><th><i>8</i>Foundation and endowment investment chiefs</th><td class='z'>0</td><td class='z'>0</td><td class='z'>0</td></tr><tr><th><i>9</i>Small oil and gas producers</th><td class='z'>0</td><td class='z'>0</td><td class='z'>0</td></tr><tr><th><i>10</i>Owners running their own companies</th><td class=''>599</td><td class=''>318</td><td class=''>197</td></tr></tbody></table></div>
+<div class="glass t scroll"><table><thead><tr><th>Audience</th><th>TX</th><th>FL</th><th>IL</th></tr></thead><tbody><tr><th><i>1</i>Family holding companies</th><td class=''>17</td><td class=''>18</td><td class=''>12</td></tr><tr><th><i>2</i>Permanent-capital and long-hold firms</th><td class=''>3</td><td class=''>2</td><td class=''>4</td></tr><tr><th><i>3</i>Family offices</th><td class=''>10</td><td class=''>8</td><td class=''>6</td></tr><tr><th><i>4</i>Small concentrated investment funds</th><td class=''>18</td><td class=''>5</td><td class=''>3</td></tr><tr><th><i>5</i>PE and hedge fund principals at small firms</th><td class=''>46</td><td class=''>3</td><td class=''>10</td></tr><tr><th><i>6</i>Mineral and royalty owners and buyers</th><td class='z'>0</td><td class='z'>0</td><td class='z'>0</td></tr><tr><th><i>7</i>Land investors and developers</th><td class='z'>0</td><td class='z'>0</td><td class='z'>0</td></tr><tr><th><i>8</i>Foundation and endowment investment chiefs</th><td class='z'>0</td><td class='z'>0</td><td class='z'>0</td></tr><tr><th><i>9</i>Small oil and gas producers</th><td class='z'>0</td><td class='z'>0</td><td class='z'>0</td></tr><tr><th><i>10</i>Owners running their own companies</th><td class=''>599</td><td class=''>318</td><td class=''>197</td></tr></tbody></table></div>
 <p class="note">Leads planned for week 1, one person per firm. Audiences 6 to 9 have no leads yet: the lead search found 100 mineral, 93 land, 13 endowment and 35 oil and gas contacts across the three states, and pulling them waits on lead credit. Anyone PremierConnect has already emailed is cut. Audiences 2 and 8 are thin in the lead database: 13 verified contacts each, all three states together.</p>
 <ul class="short"><li><b>Texas</b> 693 of 840</li><li><b>Florida</b> 354 of 840</li><li><b>Illinois</b> 232 of 840</li></ul>
 
 <h2>The email</h2>
-<div class="mail"><div class="subj"><span>Subject</span>a 10-minute test for {company}</div>
+<div class="glass mail"><div class="subj"><span>Subject</span>a 10-minute challenge for {company}</div>
 <div class="body"><p>Hello {first name},</p><p>Try this: write down the last three calls only you could make at {company}.</p><p>If none of them live anywhere but your head, that is the ceiling on the business.</p><p>Supersuit is a personal AI system, set up one on one. It learns your work and keeps your context in one place.</p><p>Would a 15-minute call with Wilson or Gary, the founders, be worth it, yes or no?</p><p>Best,<br>Demetri Panagiotou<br>Continental Works</p></div>
 <div class="foot">This is a promotional email from Continental Works. If you would rather not hear from me again, just reply STOP.<br>2220 County Road 210 West, Suite 108, #155, Jacksonville, FL 32259</div></div>
-<div class="mail" style="margin-top:10px"><div class="subj"><span>Follow-up</span>same thread, from November 16</div><div class="body"><p>Hello {first name},</p><p>Following up: would a 15-minute call with Wilson or Gary, the founders, be worth it, yes or no?</p></div></div>
+<div class="glass mail" style="margin-top:12px"><div class="subj"><span>Follow-up</span>same thread, from November 16</div><div class="body"><p>Hello {first name},</p><p>Following up: would a 15-minute call with Wilson or Gary, the founders, be worth it, yes or no?</p></div></div>
 
 <h2>The agreed terms</h2>
-<dl><div class='term'><dt>Who it&#x27;s from</dt><dd>Demetri Panagiotou, Continental Works. No title.<small>Exhibit A, signed call Nov 4</small></dd></div><div class='term'><dt>Mailboxes</dt><dd>Three free Gmail accounts. Each one emails only its own state.<small>Exhibit A</small></dd></div><div class='term'><dt>Send hours</dt><dd>Mon to Fri 8 AM to 7 PM Central. Saturday 8 AM to 2 PM. Never Sunday.<small>Signed call Nov 4</small></dd></div><div class='term'><dt>Pace</dt><dd>One email every 2 to 3 minutes per inbox, a different gap each time. 2.5 minutes on average.<small>Signed call Nov 4 (2.5 min)</small></dd></div><div class='term'><dt>Volume</dt><dd>About 140 a day per inbox. Stop everything at the first provider warning.<small>Signed call Nov 4</small></dd></div><div class='term'><dt>The email</dt><dd>Under 90 words, five sentences at most, its own subject line. No links, no price.<small>Exhibit A</small></dd></div><div class='term'><dt>Follow-ups</dt><dd>One line, same thread.<small>Exhibit A</small></dd></div><div class='term'><dt>Footer</dt><dd>&quot;This is a promotional email from Continental Works. If you would rather not hear from me again, just reply STOP.&quot; Then the postal address.<small>Exhibit A, 6.4</small></dd></div><div class='term'><dt>Approval</dt><dd>Wilson and Gary approve the copy and the lead list in writing before anything sends.<small>Agreement 6.1</small></dd></div><div class='term'><dt>Warm-up</dt><dd>At least 24 hours of warm-up before an inbox&#x27;s first cold email.<small>Exhibit A</small></dd></div><div class='term'><dt>Left out</dt><dd>Wealth and financial advisers, and anyone with no team.<small>Exhibit A</small></dd></div></dl>
+<dl><div class='glass term'><dt>Who it&#x27;s from</dt><dd>Demetri Panagiotou, Continental Works. No title.<small>Exhibit A, signed call Nov 4</small></dd></div><div class='glass term'><dt>Mailboxes</dt><dd>Three free Gmail accounts. Each one emails only its own state.<small>Exhibit A</small></dd></div><div class='glass term'><dt>Send hours</dt><dd>Mon to Fri 8 AM to 7 PM Central. Saturday 8 AM to 2 PM. Never Sunday.<small>Signed call Nov 4</small></dd></div><div class='glass term'><dt>Pace</dt><dd>One email every 2 to 3 minutes per inbox, a different gap each time. 2.5 minutes on average.<small>Signed call Nov 4 (2.5 min)</small></dd></div><div class='glass term'><dt>Volume</dt><dd>About 140 a day per inbox. Stop everything at the first provider warning.<small>Signed call Nov 4</small></dd></div><div class='glass term'><dt>The email</dt><dd>Under 90 words, five sentences at most, its own subject line. No links, no price.<small>Exhibit A</small></dd></div><div class='glass term'><dt>Follow-ups</dt><dd>One line, same thread.<small>Exhibit A</small></dd></div><div class='glass term'><dt>Footer</dt><dd>&quot;This is a promotional email from Continental Works. If you would rather not hear from me again, just reply STOP.&quot; Then the postal address.<small>Exhibit A, 6.4</small></dd></div><div class='glass term'><dt>Approval</dt><dd>Wilson and Gary approve the copy and the lead list in writing before anything sends.<small>Agreement 6.1</small></dd></div><div class='glass term'><dt>Warm-up</dt><dd>At least 24 hours of warm-up before an inbox&#x27;s first cold email.<small>Exhibit A</small></dd></div><div class='glass term'><dt>Left out</dt><dd>Wealth and financial advisers, and anyone with no team.<small>Exhibit A</small></dd></div></dl>
 </main>
+<script>
+(function(){
+  var still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  requestAnimationFrame(function(){
+    document.querySelectorAll("[data-off]").forEach(function(c){ c.style.strokeDashoffset = c.getAttribute("data-off"); });
+    document.querySelectorAll(".bar i[data-w]").forEach(function(b){ b.style.width = b.getAttribute("data-w") + "%"; });
+  });
+  if (still) return;
+  document.querySelectorAll("[data-n]").forEach(function(el){
+    var end = +el.getAttribute("data-n"); if (!end) return;
+    var t0 = null, dur = 1200;
+    function step(t){ t0 = t0 || t; var k = Math.min(1, (t - t0) / dur), v = Math.round(end * (1 - Math.pow(1 - k, 3)));
+      el.textContent = v.toLocaleString("en-US"); if (k < 1) requestAnimationFrame(step); }
+    requestAnimationFrame(step);
+  });
+})();
+</script>
 <script type="application/json" id="fallback">{
-  "asOf": "2026-11-09T01:34:43.248Z",
+  "asOf": "2026-11-09T06:27:39.593Z",
   "testStart": "2026-11-23",
   "length": 90,
   "day": 0,
